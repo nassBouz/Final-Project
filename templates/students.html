@@ -1,0 +1,25 @@
+{% extends "teacher.html" %}
+
+{% block student_list %}
+
+    {% if students %}
+    <h3>Students</h3>
+        {% for student in students %}
+            <article class="commentbox">
+                <div id="post-list-wrap">
+                    <div>
+                        <div>
+                            <img src={{student.profileImgUrl}} />
+                        </div>
+                    </div>
+                    <div>
+                        <div >
+                            <a href={{url_for('students', id=student.id)}}><p>{{student.fullname}}</p></a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
