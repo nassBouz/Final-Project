@@ -34,14 +34,12 @@ def load_user(teacherid):
 
 @app.before_request
 def before_request():
-    """Connect to the database before each request."""
     g.db = models.DATABASE
     g.db.connect()
     g.user = current_user
 
 @app.after_request
 def after_request(response):
-    """Close the database connection after each request."""
     g.db.close()
     return response
 
@@ -68,8 +66,25 @@ def index():
         handle_signin(sign_in_form)
 
     return render_template('auth.html', sign_in_form=sign_in_form)
+# handle logout 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash("You've been logged out", "success")
+    return redirect(url_for('index'))
 
+@app.route('/profile/<username>', methods=['GET'])
+def profilepage(username):
+    teacher = models.Teacher.get(models.Teacher.username == username)
+    students = models.Student.select().where(models.Student.teacher_id==int(teacher.id))
+    return render_template('teacher.html', teacher=teacher,students=students) 
 
+# get all students
+@app.route('/students', methods =['GET'])
+def students():
+    students = models.Student.select().limit(100)
+    return render_template('students.html', students=students)
 
 @app.route('/aboutUs')
 def aboutUs():
@@ -83,11 +98,11 @@ if __name__ == '__main__':
             username='brown',
             email="brown@ga.com",
             password='123',
-            fullname= 'Brown Simpson',
+            fullname= 'Brown Katia',
             address='12 west street Oakland CA',
             phonenumber='2042334343',
             biography='I have 5 years experience',
-            profileImgUrl= 'http://interactive.nydailynews.com/2016/05/simpsons-quiz/img/simp1.jpg'
+            profileImgUrl= 'https://www.opticalexpress.co.uk/images/feature-imgs/lady-with-glasses-smiling.jpg'
             )
         models.Teacher.create_teacher(
             username='Jeff',
@@ -106,13 +121,13 @@ if __name__ == '__main__':
             password='123',
             profileImgUrl='myImage',
             phonenumber='51090095454',
-            address='122 west Oakland ca',
+            address='44 North Street West Oakland ca',
             about='here'
             )
         models.Parent.create_parent(
             username='zola',
             email='zola@gmail.com',
-            fullname ='Zola Cherik',
+            fullname ='Cherik Zola',
             password='123',
             profileImgUrl='myImage',
             phonenumber='510900667754',
@@ -122,13 +137,38 @@ if __name__ == '__main__':
         models.Student.create_student(
             teacher=1,
             parent=1,
-            fullname='Boulou Tarik',
+            fullname='Bouz Yanni',
             gender='male',
-            dateOfBirth='03-04-2012',
+            dateOfBirth='03-04-2013',
             profileImgUrl='image',
             phonenumber='9259002323',
+            address='44 North Street West Oakland ca',
+            medicalNeeds='Peanut allergy',
+            otherDetails='OTHER STUFFS'
+            )
+        models.Student.create_student(
+            teacher=1,
+            parent=2,
+            fullname='Cherik Zira',
+            gender='female',
+            dateOfBirth='03-04-2012',
+            profileImgUrl='image',
+            phonenumber='9259001111',
             address='122 west Oakland ca',
-            medicalNeeds='Peanut allergy'
+            medicalNeeds='Peanut allergy',
+            otherDetails='OTHER STUFFS'
+            )
+        models.Student.create_student(
+            teacher=2,
+            parent=2,
+            fullname='Cherik Fazia',
+            gender='female',
+            dateOfBirth='03-04-2015',
+            profileImgUrl='image',
+            phonenumber='9259001111',
+            address='122 west Oakland ca',
+            medicalNeeds='no allergies',
+            otherDetails='OTHER STUFFS'
             )
     except ValueError:
         pass
