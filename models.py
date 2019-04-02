@@ -42,8 +42,8 @@ class Teacher(UserMixin, Model):
         except IntegrityError:
             raise ValueError("Teacher already exists")
 
-    # def get_students(self):
-    #     return Student.select().where(Student.Teacher == self)
+    def get_students(self):
+        return Student.select().where((Student.teacher == self))
 
 
 
@@ -113,7 +113,7 @@ class Student(Model):
         order_by = ('-joined_at',)
         
     @classmethod
-    def create_student(cls,teacher,parent,fullname,gender, dateOfBirth, profileImgUrl,phonenumber, address,medicalNeeds):
+    def create_student(cls,teacher,parent,fullname,gender, dateOfBirth, profileImgUrl,phonenumber, address,medicalNeeds, otherDetails):
         try:
             cls.create(
                 teacher=teacher,
@@ -124,10 +124,13 @@ class Student(Model):
                 profileImgUrl=profileImgUrl,
                 phonenumber=phonenumber,
                 address=address,
-                medicalNeeds=medicalNeeds
+                medicalNeeds=medicalNeeds,
+                otherDetails=otherDetails
             )
         except IntegrityError:
             raise ValueError("Student already exists")
+        except Error:
+            raise print('create error')
 
 # ------------------- ----------------------------------- #
 # ------------------- Classe Model --------------------- #
