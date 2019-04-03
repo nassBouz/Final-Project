@@ -25,6 +25,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = '/'
 
+# load teacher
 @login_manager.user_loader
 def load_user(teacherid):
     try:
@@ -42,31 +43,68 @@ def before_request():
 def after_request(response):
     g.db.close()
     return response
+# //////////////////////parent //////////////////
+# load parent 
+@login_manager.user_loader
+def load_parent(parentid):
+    try:
+        return models.Parent.get(models.Parent.id == parentid)
+    except models.DoesNotExist:
+        return None
 
+# parent signin
+def handle_signinParent(form):
+    try:
+        parent = models.Parent.get(models.Parent.email == form.email.data)
+    except models.DoesNotExist:
+        flash("parent !!!your email or password doesn't match", "error")
+    else:
+        if check_password_hash(parent.password, form.password.data):
+            login_user(parent)
+            flash('Hi parent ! You have successfully Signed In!!!', 'success signin')
+            return redirect(url_for('index'))
+        else:
+            flash(" parent your email or password doesn't match", "error")
+# /////////////////////////////////////fin parent //////////////////////////////
 # signin teacher
-def handle_signin(form):
+def handle_signinTeacher(form):
     try:
         teacher = models.Teacher.get(models.Teacher.email == form.email.data)
     except models.DoesNotExist:
-        flash("your email or password doesn't match", "error")
+        flash("teacher your email or password doesn't match", "error")
     else:
         if check_password_hash(teacher.password, form.password.data):
             login_user(teacher)
-            flash('Hi! You have successfully Signed In!!!', 'success signin')
+            flash('Hi teacher! You have successfully Signed In!!!', 'success signin')
             return redirect(url_for('index'))
             # return render_template('aboutUs.html')
         else:
             flash("your email or password doesn't match", "error")
 
 # landing page 
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/', methods=['GET'])
 def index():
-    sign_in_form = forms.SignInForm()
-    if sign_in_form.validate_on_submit():
-        handle_signin(sign_in_form)
-
-    return render_template('auth.html', sign_in_form=sign_in_form)
+    print(current_user)
+    teachersign_in_form = forms.SignInForm()
+    parentsign_in_form = forms.SignInForm()
+    return render_template('auth.html', teachersign_in_form=teachersign_in_form, parentsign_in_form=parentsign_in_form)
 # handle logout 
+
+@app.route('/login/parent', methods=['POST'])
+def login_parent():
+    parentsign_in_form = forms.SignInForm()
+    if parentsign_in_form.validate_on_submit():  
+        handle_signinParent(parentsign_in_form)
+        return redirect(url_for('index'))
+
+@app.route('/login/teacher', methods=['POST'])
+def login_teacher():
+    teachersign_in_form = forms.SignInForm()
+    if teachersign_in_form.validate_on_submit():
+        handle_signinTeacher(teachersign_in_form)
+        return redirect(url_for('index'))
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -74,11 +112,18 @@ def logout():
     flash("You've been logged out", "success")
     return redirect(url_for('index'))
 
-@app.route('/profile/<username>', methods=['GET'])
-def profilepage(username):
-    teacher = models.Teacher.get(models.Teacher.username == username)
+@app.route('/profile/<teacherid>', methods=['GET'])
+def profilepage(teacherid):
+    teacher = models.Teacher.get(models.Teacher.id== teacherid)
     students = models.Student.select().where(models.Student.teacher_id==int(teacher.id))
     return render_template('teacher.html', teacher=teacher,students=students) 
+
+# parent profile
+@app.route('/parentprofile/<parentid>', methods=['GET'])
+def parentpage(parentid):
+    parent = models.Parent.get(models.Parent.id== parentid)
+    students = models.Student.select().where(models.Student.parent_id==int(parent.id))
+    return render_template('parent.html', parent=parent,students=students) 
 
 # get all students
 @app.route('/students', methods =['GET'])
