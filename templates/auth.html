@@ -1,25 +1,15 @@
 {% extends "layout.html" %}
 {% from 'macros.html' import render_field %}
 
-{% block parentsignin %}
-    <form method="POST" action="{{ url_for('login_parent') }}" class="form">
-        {{ parentsign_in_form.hidden_tag() }}
-
-        {% for field in parentsign_in_form %}
+{% block signin %}
+    <form method="POST"  class="form">
+        {{ sign_in_form.hidden_tag() }}
+        {% for field in sign_in_form %}
             {{ render_field(field) }}
         {% endfor %}
-        <button type="submit" class="btn btn-dark" id="submit">Parent Sign In!</button>
+        <button type="submit" class="btn btn-dark" id="submit">Sign In!</button>
     </form>
 {% endblock %}
 
-{% block teachersignin %}
-    <form method="POST" action="{{ url_for('login_teacher') }}" class="form">
-        {{ teachersign_in_form.hidden_tag() }}
 
-        {% for field in teachersign_in_form %}
-            {{ render_field(field) }}
-        {% endfor %}
-        <button type="submit" class="btn btn-dark" id="submit">Sign In Teacher!</button>
-    </form>
-{% endblock %}
 

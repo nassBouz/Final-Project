@@ -30,7 +30,7 @@
     <div class="content">
     <!--###############  Begin of Nav bar regular ########### -->
         <header>
-                <nav class="navbar navbar-light bg-light">
+            <nav class="navbar navbar-light bg-light">
                     
                     <a class="navbar-brand" href="{{ url_for('index') }}">
                         <img id="logo" src={{url_for("static", filename= "logoMyEcole.png")}} width='78' height='65' alt="">
@@ -42,7 +42,7 @@
                     
                     <!-- display error message -->
                     <div id="error_message">
-                        {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% with messages = get_flashed_messages(with_categories=true) %}
                             {% if messages %}
                                 {% for category, message in messages %}
                                     <div class={{category}}>{{ message }}</div>
@@ -50,73 +50,65 @@
                             {% endif %}
                         {% endwith %}
                     </div>
-                
-                {% if current_user.is_authenticated %}
-                    <a id="anchor" href={{url_for('profilepage', teacherid=current_user.id)}}><h3> My Students</h3></a>
-                    <a href="{{url_for('logout')}}"> <button class="btn btn-dark">Sign Out</button></a>
-                {% else %}
-                <div class= "teacherSignIn">
-                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SignInTeacherModal">Teacher Sign In</button>
-                    <!-- Modal -->
-                    <div class="modal fade" id="SignInTeacherModal" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header" id="modal-header">
-                                    <h3 class="modal-title" id="SignInModalTitle">Welcome back! Sign In</h3>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    {% block teachersignin %}
-                                    {% endblock %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {%endif%}
-                <!-- ////////////////////////// -->
-                {% if current_user.is_authenticated %}
-                    <a id="anchor" href={{url_for('parentpage', parentid=current_user.id)}}><h3> My Kids</h3></a>
-                    <a href="{{url_for('logout')}}"> <button class="btn btn-dark">Sign Out</button></a>
+                <!-- ///////////teacher//////////// -->
+                {% if current_user.is_authenticated  and current_user.role=='teacher' %}
+                    <a>{{current_user.username}}</a>
+                    <a id="anchor" href={{url_for('profilepage', userid=current_user.id)}}><h3> My Students</h3></a>
+                    <a href="{{url_for('logout')}}"> <button class="btn btn-dark">teacher Sign Out</button></a>
+                <!-- ////////////parent////////////// -->
+                {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
+                <a>{{current_user.username}}</a>
+                    <a id="anchor" href={{url_for('parentpage', userid=current_user.id)}}><h3> My Kids</h3></a>
+                    <a href="{{url_for('logout')}}"> <button class="btn btn-dark">parent Sign Out</button></a>
                 {%else%}
-                <div class= "ParentSignIn">
-                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SignInParentModal">Parent Sign In</button>
-                    <!-- Modal -->
-                    <div class="modal fade" id="SignInParentModal" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header" id="modal-header">
-                                    <h3 class="modal-title" id="SignInModalTitle">Welcome back! Sign In</h3>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    {% block parentsignin %}
-                                    {% endblock %}
+                    <div class= "SignIn">
+                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SignIn">Sign In</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="SignIn" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" id="modal-header">
+                                        <h3 class="modal-title" id="SignInModalTitle">Sign In</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {% block signin %}
+                                        {% endblock %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            {% endif %} 
+                {% endif %} 
             </nav>
-            {% if current_user.is_authenticated %}
-            <div class="modal-body">
-                    {% block myStudents%}
-                    {% endblock %}
-            </div>
-            <div class="modal-body">
-                {% block mykids%}
-                {% endblock %}
-            </div>
-            {% else %}
+           
+            {% if not current_user.is_authenticated %}
                 <section id="aboutWrap">
                     <h2>About</h2>
-                    <p>Missed a fun event close to where you live? Need helping moving that couch up some stairs? Heard a car alarm go off last night? Find out about whats happening in your neighborhood! Use NeighborAlert to keep up with most current news and events in your area!</p>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque recusandae necessitatibus quaerat fuga magni provident porro architecto eius voluptate iure officia, facilis labore voluptatibus ducimus maiores, quisquam iusto natus culpa.</p>
                 </section>
+            {% elif current_user.is_authenticated and current_user.role=='teacher' %}
+                <div class="modal-body">
+                    {% block myStudents%}
+                    {% endblock %}
+                </div>
+                <div class="mystudentDeatlss">
+                        {% block mystudentDetail %}
+                        {% endblock %}
+                </div>
+                
+            {% elif current_user.is_authenticated and current_user.role=='parent' %}
+                <div class="modal-body">
+                    {% block mykids%}
+                    {% endblock %}
+                </div>
+                <div class="myKidsDetails"></div>
+                    {% block myKidsDetail %}
+                    {% endblock %}
+                 </div>
+                
             {% endif %}
     </div>
     <footer>
