@@ -9,24 +9,26 @@ DATABASE = SqliteDatabase('myEcole.db')
 # ------------------- ----------------------------------- #
 # ------------------- Teacher Model --------------------- #
 # ------------------- ----------------------------------- #
-class Teacher(UserMixin, Model):
+class User(UserMixin, Model):
     username = CharField(unique=True)
     fullname = CharField(max_length=120)
     email = CharField(unique=True)
     password = CharField(max_length=100)
-    biography = TextField()
+    about = TextField()
     joined_at = DateTimeField(default=datetime.datetime.now())
     address =CharField(max_length=120)
     is_admin = BooleanField(default=False)
     phonenumber = CharField(max_length=15)
     profileImgUrl = CharField(default='static/userDefault.png')
+    # make it strict to teacher or parent only
+    role = CharField(max_length=120)
     
     class Meta:
         database = DATABASE
         order_by = ('-joined_at',)
         
     @classmethod
-    def create_teacher(cls, username, email,fullname, password, profileImgUrl,phonenumber, address,biography,admin=False):
+    def create_user(cls, username, email,fullname, password, profileImgUrl,phonenumber, address,about,role,admin=False):
         try:
             cls.create(
                 username=username,
@@ -37,51 +39,18 @@ class Teacher(UserMixin, Model):
                 profileImgUrl=profileImgUrl,
                 phonenumber=phonenumber,
                 address=address,
-                biography=biography
+                about=about,
+                role=role
             )
         except IntegrityError:
-            raise ValueError("Teacher already exists")
+            raise ValueError("user already exists")
 
     def get_students(self):
-        return Student.select().where((Student.teacher == self))
+        return Student.select().where((Student.user == self))
 
 
 
-# ------------------- ----------------------------------- #
-# ------------------- Parent Model --------------------- #
-# ------------------- ----------------------------------- #
-class Parent(UserMixin, Model):
-    username = CharField(unique=True)
-    fullname = CharField(max_length=120)
-    email = CharField(unique=True)
-    password = CharField(max_length=100)
-    about = CharField(max_length=100)
-    joined_at = DateTimeField(default=datetime.datetime.now())
-    address =CharField(max_length=120)
-    is_admin = BooleanField(default=False)
-    phonenumber = CharField(max_length=15)
-    profileImgUrl = CharField(default='static/userDefault.png')
-    
-    class Meta:
-        database = DATABASE
-        order_by = ('-joined_at',)
-        
-    @classmethod
-    def create_parent(cls, username, email,fullname, password, profileImgUrl,phonenumber, address,about,admin=False):
-        try:
-            cls.create(
-                username=username,
-                email=email,
-                fullname =fullname,
-                password=generate_password_hash(password),
-                is_admin=admin,
-                profileImgUrl=profileImgUrl,
-                phonenumber=phonenumber,
-                address=address,
-                about=about
-            )
-        except IntegrityError:
-            raise ValueError("Parent already exists")
+
 
 # ------------------- ----------------------------------- #
 # ------------------- Student Model --------------------- #
@@ -89,12 +58,12 @@ class Parent(UserMixin, Model):
 class Student(Model):
     # foreign key teacher 
     teacher = ForeignKeyField( 
-        model=Teacher, 
+        model=User, 
         backref='students'
     )
     # foreign key parent 
     parent = ForeignKeyField(
-        model=Parent, 
+        model=User, 
         backref='students'
     ) 
     fullname = CharField(max_length=120)
@@ -168,13 +137,14 @@ class Classe(Model):
 # ------------------- ----------------------------------- #
 class Message(Model):
     # foreign key teacher 
-    teacher = ForeignKeyField( model=Teacher,backref='messages')
+    recipient = ForeignKeyField( model=User,backref='messages')
+    student = ForeignKeyField( model=Student,backref='messages')
     # foreign key parent 
-    parent = ForeignKeyField( model=Parent,backref='messages') 
+    sender = ForeignKeyField( model=User,backref='messages') 
     title = TextField()
     text = TextField()
     mesageDate = DateTimeField(default=datetime.datetime.now())
-    imageUrl = CharField()
+    imageUrl = CharField(default="noImage")
     imageFile=CharField()
     red= BooleanField(default=False)
     class Meta:
@@ -182,15 +152,16 @@ class Message(Model):
         order_by = ('-mesageDate',)
         
     @classmethod
-    def create_message(cls,teacher,parent,title, text,imageUrl,imageFile,red=False):
+    def create_message(cls,recipient,sender,title, text,imageUrl,imageFile,student,red=False):
         try:
             cls.create(
-                teacher=teacher,
-                parent=parent,
+                recipient=recipient,
+                sender=sender,
                 title=title,
                 text=text,
                 imageUrl=imageUrl,
                 imageFile=imageFile,
+                student=student,
                 red=red 
             )
         except IntegrityError:
@@ -200,7 +171,7 @@ class Message(Model):
 # ------------------- ----------------------------------- #
 class StudentClasse(Model):
     classe = ForeignKeyField( model=Classe,backref='StudentClasses')
-    student= ForeignKeyField( model=Teacher,backref='StudentClasses')
+    student= ForeignKeyField( model=User,backref='StudentClasses')
     dateFrom = DateField()
     dateTo= DateField()
     dateCreated= DateTimeField(default=datetime.datetime.now())
@@ -226,5 +197,5 @@ class StudentClasse(Model):
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([Teacher,Parent,Classe,Message,StudentClasse,Student], safe=True)
+    DATABASE.create_tables([User,Classe,Message,StudentClasse,Student], safe=True)
     DATABASE.close()  
