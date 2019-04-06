@@ -1,12 +1,15 @@
+{% extends "layout.html" %}
+
 {% block mykids %}
-    <div class="profile-div" id="my-posts">
-        <h5 class="post-title">My Students</h5>
+    <div class="profile-div" id="my-kids">
+        <h5 class="post-title">My Students kids</h5>
         {% if students %}    
             {% for student in students %}
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href={{url_for('students')}}>{{student.fullname}}</a>
-                        <span class="badge badge-primary badge-pill">2</span>
+                        <a href={{url_for('getstudent', studentid=student.id)}}>{{student.fullname}}</a>
+                        <p>teacher name: {{student.teacher.fullname}}</p>
+                        <span class="badge badge-primary badge-pill">3</span>
                     </li>
                 </ul>
             {% endfor %}
@@ -16,18 +19,19 @@
     <div class="card mb-3" style="max-width: 18rem">
         <div class="row no-gutters">
             <div class="col-md-4">
-                <img style="max-width: 18rem;" id="profile-img" src={{parent.profileImgUrl}} />
+                <img style="max-width: 18rem;" id="profile-img" src={{user.profileImgUrl}} />
             </div>
             <div class="col-md-8"></div>
                 <div class="card-body">
                     <h5 class="card-title">My Profile</h5>
-                    <p class="card-text" >Full Name: {{ parent.fullname }}</p>
-                    <p class="card-text">User Name: {{ parent.username }}</p>
-                    <p class="card-text">Email Address: {{ parent.email }}</p>
-                    <p class="card-text">Joined On : <time data-time="{{ parent.joined_at }}" class="distime" datetime="{{ parent.joined_at.strftime('%Y-%m-%d') }}">{{ parent.joined_at.strftime('%Y-%m-%d') }}</time></p>
+                    <p class="card-text" >Full Name: {{ user.fullname }}</p>
+                    <p class="card-text">User Name: {{ user.username }}</p>
+                    <p class="card-text">Email Address: {{ user.email }}</p>
+                    <p class="card-text">Joined On : <time data-time="{{ user.joined_at }}" class="distime" datetime="{{ user.joined_at.strftime('%Y-%m-%d') }}">{{ user.joined_at.strftime('%Y-%m-%d') }}</time></p>
                 </div>
                 <a href="#" class="btn  btn-primary">Edit my Information</a>
             </div>
         </div>
     </div>
 {% endblock %}
+
