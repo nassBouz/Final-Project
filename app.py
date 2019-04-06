@@ -27,9 +27,9 @@ login_manager.login_view = '/'
 
 # load teacher
 @login_manager.user_loader
-def load_user(teacherid):
+def load_user(userid):
     try:
-        return models.Teacher.get(models.Teacher.id == teacherid)
+        return models.User.get(models.User.id == userid)
     except models.DoesNotExist:
         return None
 
@@ -43,38 +43,17 @@ def before_request():
 def after_request(response):
     g.db.close()
     return response
-# //////////////////////parent //////////////////
-# load parent 
-@login_manager.user_loader
-def load_parent(parentid):
-    try:
-        return models.Parent.get(models.Parent.id == parentid)
-    except models.DoesNotExist:
-        return None
 
-# parent signin
-def handle_signinParent(form):
-    try:
-        parent = models.Parent.get(models.Parent.email == form.email.data)
-    except models.DoesNotExist:
-        flash("parent !!!your email or password doesn't match", "error")
-    else:
-        if check_password_hash(parent.password, form.password.data):
-            login_user(parent)
-            flash('Hi parent ! You have successfully Signed In!!!', 'success signin')
-            return redirect(url_for('index'))
-        else:
-            flash(" parent your email or password doesn't match", "error")
-# /////////////////////////////////////fin parent //////////////////////////////
 # signin teacher
-def handle_signinTeacher(form):
+def handle_signin(form):
     try:
-        teacher = models.Teacher.get(models.Teacher.email == form.email.data)
+        print(form.email.data)
+        user = models.User.get(models.User.email == form.email.data)
     except models.DoesNotExist:
         flash("teacher your email or password doesn't match", "error")
     else:
-        if check_password_hash(teacher.password, form.password.data):
-            login_user(teacher)
+        if check_password_hash(user.password, form.password.data):
+            login_user(user)
             flash('Hi teacher! You have successfully Signed In!!!', 'success signin')
             return redirect(url_for('index'))
             # return render_template('aboutUs.html')
@@ -82,27 +61,14 @@ def handle_signinTeacher(form):
             flash("your email or password doesn't match", "error")
 
 # landing page 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     print(current_user)
-    teachersign_in_form = forms.SignInForm()
-    parentsign_in_form = forms.SignInForm()
-    return render_template('auth.html', teachersign_in_form=teachersign_in_form, parentsign_in_form=parentsign_in_form)
-# handle logout 
-
-@app.route('/login/parent', methods=['POST'])
-def login_parent():
-    parentsign_in_form = forms.SignInForm()
-    if parentsign_in_form.validate_on_submit():  
-        handle_signinParent(parentsign_in_form)
+    sign_in_form = forms.SignInForm()
+    if sign_in_form.validate_on_submit():
+        handle_signin(sign_in_form)
         return redirect(url_for('index'))
-
-@app.route('/login/teacher', methods=['POST'])
-def login_teacher():
-    teachersign_in_form = forms.SignInForm()
-    if teachersign_in_form.validate_on_submit():
-        handle_signinTeacher(teachersign_in_form)
-        return redirect(url_for('index'))
+    return render_template('auth.html', sign_in_form=sign_in_form)
 
 
 @app.route('/logout')
@@ -112,24 +78,100 @@ def logout():
     flash("You've been logged out", "success")
     return redirect(url_for('index'))
 
-@app.route('/profile/<teacherid>', methods=['GET'])
-def profilepage(teacherid):
-    teacher = models.Teacher.get(models.Teacher.id== teacherid)
-    students = models.Student.select().where(models.Student.teacher_id==int(teacher.id))
-    return render_template('teacher.html', teacher=teacher,students=students) 
+@app.route('/teacherprofile/<userid>', methods=['GET'])
+def profilepage(userid):
+    user = models.User.get(models.User.id == int(userid))
+    students = models.Student.select().where(models.Student.teacher_id==int(user.id))
+    return render_template('teacher.html', user=user ,students=students) 
 
-# parent profile
-@app.route('/parentprofile/<parentid>', methods=['GET'])
-def parentpage(parentid):
-    parent = models.Parent.get(models.Parent.id== parentid)
-    students = models.Student.select().where(models.Student.parent_id==int(parent.id))
-    return render_template('parent.html', parent=parent,students=students) 
+@app.route('/parentprofile/<userid>', methods=['GET'])
+def parentpage(userid):
+    user = models.User.get(models.User.id == int(userid))
+    students = models.Student.select().where(models.Student.parent_id==int(user.id))
+    return render_template('parent.html', user=user,students=students)
+
+
 
 # get all students
-@app.route('/students', methods =['GET'])
-def students():
-    students = models.Student.select().limit(100)
-    return render_template('students.html', students=students)
+@app.route('/students', methods =['GET', 'POST'])
+@app.route('/students/<studentid>', methods =['GET', 'POST'])
+def students(sudentid):
+    # students = models.Student.select().limit(100)
+    student = models.Student.get(models.Student.id == int(studentid))
+    return render_template('students.html', student=student)
+ 
+
+
+
+@app.route('/message/<studentid>', methods =['GET', 'POST','PUT'])
+def getstudent(studentid=None):
+    if studentid != None :
+        student = models.Student.select().where(models.Student.id == int(studentid)).get()
+        user = g.user._get_current_object()
+        messages = models.Message.select().where(models.Message.student_id==int(studentid))
+        form = forms.MessageForm()
+        if form.validate_on_submit():
+            if user.role == 'teacher':
+                models.Message.create(
+                    sender= user.id,
+                    recipient = student.parent,
+                    title= form.title.data,
+                    text= form.text.data,
+                    imageFile=form.imageFile.data,
+                    imageUrl=form.imageUrl.data,
+                    student=student
+                )
+                return redirect("/message/{}".format(studentid))
+                # return render_template('student.html',form=form ,student=student, user=user, messages=messages)
+            else:
+                models.Message.create(
+                    sender= user.id,
+                    recipient = student.teacher,
+                    title= form.title.data,
+                    text= form.text.data,
+                    imageFile=form.imageFile.data,
+                    imageUrl=form.imageUrl.data,
+                    student=student
+                )
+                # return render_template('student.html',form=form ,student=student, user=user, messages=messages)
+                return redirect("/message/{}".format(studentid))
+
+        return render_template('student.html',form=form ,student=student, user=user, messages=messages)
+# edit message
+@app.route('/edit-message/<messageid>', methods=['GET','POST'])
+def edit_message(messageid=None):
+    message_id = int(messageid)
+    message = models.Message.get(models.Message.id == message_id)
+    studentid = message.student_id
+    print('there is the student id in edit:', studentid)
+    student = models.Student.get_by_id(int(studentid))
+    user = g.user._get_current_object()
+    form = forms.MessageForm()
+    if form.validate_on_submit():
+        message.title= form.title.data
+        message.text= form.text.data
+        message.imageFile=form.imageFile.data
+        message.imageUrl=form.imageUrl.data
+        message.save()
+        flash('Your changes have been saved.', 'success')
+        # return redirect("/message/{}".format(studentid))
+        return redirect(url_for('message', messageid= message.id))
+    
+    return render_template('student.html',form=form ,student=student,user=user, message=message)
+    
+
+# edit message
+@app.route('/message/<messageid>/delete')
+def delete_message(messageid):
+    message_id = int(messageid)
+    message = models.Message.get(models.Message.id == message_id)
+    studentid = message.student_id
+    message.delete_instance()
+
+    return redirect("/message/{}".format(studentid))
+
+
+
 
 @app.route('/aboutUs')
 def aboutUs():
@@ -139,53 +181,57 @@ def aboutUs():
 if __name__ == '__main__':
     models.initialize()
     try:
-        models.Teacher.create_teacher(
+        models.User.create_user(
             username='brown',
             email="brown@ga.com",
             password='123',
             fullname= 'Brown Katia',
             address='12 west street Oakland CA',
             phonenumber='2042334343',
-            biography='I have 5 years experience',
-            profileImgUrl= 'https://www.opticalexpress.co.uk/images/feature-imgs/lady-with-glasses-smiling.jpg'
+            about='I have 5 years experience',
+            profileImgUrl= 'https://www.opticalexpress.co.uk/images/feature-imgs/lady-with-glasses-smiling.jpg',
+            role='teacher'
             )
-        models.Teacher.create_teacher(
+        models.User.create_user(
             username='Jeff',
             email="jeff@ga.com",
             password='123',
             fullname= 'Jeff Habib',
             address='23 west street Oakland CA',
             phonenumber='212334390008',
-            biography='I have 2 years experience working with kids',
-            profileImgUrl= 'http://interactive.nydailynews.com/2016/05/simpsons-quiz/img/simp1.jpg'
+            about='I have 2 years experience working with kids',
+            profileImgUrl= 'http://interactive.nydailynews.com/2016/05/simpsons-quiz/img/simp1.jpg',
+            role='teacher'
             )
-        models.Parent.create_parent(
+        models.User.create_user(
             username='nassBouz',
             email='bouzianenassima@gmail.com',
             fullname ='Nassima Bouz ',
             password='123',
-            profileImgUrl='myImage',
+            profileImgUrl='http://thewildmagazine.com/wp-content/uploads/2012/01/DSC5526-copy.jpeg',
             phonenumber='51090095454',
             address='44 North Street West Oakland ca',
-            about='here'
+            about='here',
+            role='parent'
             )
-        models.Parent.create_parent(
+        models.User.create_user(
             username='zola',
             email='zola@gmail.com',
             fullname ='Cherik Zola',
             password='123',
-            profileImgUrl='myImage',
+            profileImgUrl='https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg',
             phonenumber='510900667754',
             address='122 west Oakland ca',
-            about='sweet'
+            about='sweet',
+            role='parent'
             )
         models.Student.create_student(
             teacher=1,
-            parent=1,
+            parent=3,
             fullname='Bouz Yanni',
             gender='male',
             dateOfBirth='03-04-2013',
-            profileImgUrl='image',
+            profileImgUrl='https://images.theconversation.com/files/50558/original/t739v7sc-1402311181.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
             phonenumber='9259002323',
             address='44 North Street West Oakland ca',
             medicalNeeds='Peanut allergy',
@@ -193,11 +239,11 @@ if __name__ == '__main__':
             )
         models.Student.create_student(
             teacher=1,
-            parent=2,
+            parent=4,
             fullname='Cherik Zira',
             gender='female',
             dateOfBirth='03-04-2012',
-            profileImgUrl='image',
+            profileImgUrl='https://static1.bigstockphoto.com/4/3/2/large1500/234733213.jpg',
             phonenumber='9259001111',
             address='122 west Oakland ca',
             medicalNeeds='Peanut allergy',
@@ -205,15 +251,25 @@ if __name__ == '__main__':
             )
         models.Student.create_student(
             teacher=2,
-            parent=2,
+            parent=4,
             fullname='Cherik Fazia',
             gender='female',
             dateOfBirth='03-04-2015',
-            profileImgUrl='image',
+            profileImgUrl='http://i0.wp.com/sguru.org/wp-content/uploads/2017/02/cute-girls-profile-pics-for-facebook-13.jpg',
             phonenumber='9259001111',
             address='122 west Oakland ca',
             medicalNeeds='no allergies',
             otherDetails='OTHER STUFFS'
+            )
+        models.Message.create_message(
+            sender=1,
+            recipient=3,
+            student=1,
+            title="Bad behavior",
+            text="your son is recently behaving really bad !! please take action or i am gonna take disciblinary actions ",
+            imageUrl="none",
+            imageFile='nothing',
+            red=False
             )
     except ValueError:
         pass
