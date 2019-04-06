@@ -1,0 +1,16 @@
+{% extends "students.html" %}
+
+{% block message_list %}
+
+    {% if messagess %}
+        <h1>Messages List</h1>
+        {% for message in messages %}
+            <article class="message is-primary">
+                <div class="message-header">
+                        {{message.text}} <p> By: {{message.teacher.username}}</p>
+                </div>
+            </article>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
