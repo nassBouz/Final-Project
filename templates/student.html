@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
-
+{% from "macros.html" import field_error %}
+{% from 'macros.html' import render_field %}
 
 {% block mystudentDetail %}
 
@@ -15,7 +16,6 @@
                     <p class="card-text">Student Date of Birth: {{ student.dateOfBirth }}</p>
                     <p class="card-text">Student Address: {{ student.address }}</p>
                 </div>
-                <a href="#" class="btn  btn-primary">Edit Student Information</a>
             </div>
         </div>
     </div>
@@ -24,24 +24,66 @@
         <div id="messagesSection">
             <h4>{{ student.fullname }}  has {{ messages.count() }} Messages</h4>
             {% for message in messages %}
-            <div class="messagebox">
-                <div>
-                    <p>Title: {{message.title}}</p>
-                    <p>text: {{message.text}}</p>
+              {% if current_user == message.sender%}
+                <div class="messagebox" style="background-color:powderblue;">
+                    <div>
+                        <p>Title: {{message.title}}</p>
+                        <p>text: {{message.text}}</p>
+                    </div>
+                    {% if message.imageUrl != 'noImage' %}
+                      <h6>here the image</h6><img src={{message.imageUrl}}>
+                    {%endif%}
+                    <div>
+                        <p>By: {{message.sender.username}}</p>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" data-toggle="modal"  onclick="location.href='edit_message';">
+                    <a href=# ><button type=submit class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter1">edit message</button></a>
+                     <!-- Modal edit -->
+                      <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                              <div class="modal-body">
+                                  <form method="POST" action="{{ url_for('edit_message', messageid=message.id) }}" nonvalidate>
+                                    {{form.hidden_tag()}}
+                                    <div class="form-group">
+                                      <label class="col-form-label">title:</label>
+                                      {{ form.title() }}
+                                      <label class="col-form-label">text: {{ form.text }}</label>
+                                      <label class="col-form-label">{{ form.imageUrl() }}</label>
+                                      <label class="col-form-label">{{ form.imageFile() }}</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type=submit  class="btn btn-primary" >edit message</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </form>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    <a href={{url_for('delete_message', messageid=message.id)}}><button class="btn btn-danger" id="submitButton">Delete</button></a>
+
                 </div>
-                {% if message.imageUrl != 'noImage' %}
-                  <h6>here the image</h6><img src={{message.imageUrl}}>
-                {%endif%}
-                <div>
-                    <p>By: {{message.sender.username}}</p>
-                </div>
-                <a href={{url_for('edit_message', messageid=message.id)}}><button class="btn btn-dark" id="submitButton">Edit</button></a>
-                <a href={{url_for('delete_message', messageid=message.id)}}><button class="btn btn-danger" id="submitButton">Delete</button></a>
+              {% else %}
+              <div class="messagebox" style="background-color:yellow;">
+                  <div>
+                      <p>Title: {{message.title}}</p>
+                      <p>text: {{message.text}}</p>
+                  </div>
+                  {% if message.imageUrl != 'noImage' %}
+                    <h6>here the image</h6><img src={{message.imageUrl}}>
+                  {%endif%}
+                  <div>
+                      <p>By: {{message.sender.username}}</p>
+                  </div>
               </div>
+              {% endif%}
             {% endfor %}
         </div>
     {% else%}
-      <p>No Messages for now</p>
+      <p>No messages for now</p>
     {% endif %}
    <!-- Button trigger modal -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">create a message</button>
@@ -78,6 +120,7 @@
       </div>
     </div>
 </div>  
+
 {% endblock %}
 
 
@@ -161,4 +204,6 @@
     </div>
 </div>  
 {% endblock %}
+
+
 

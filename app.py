@@ -8,22 +8,37 @@ import models
 import forms 
 import json
 # from keyNeigh import keyNeigh
-
+# for mail alert
+from flask_mail import Mail, Message
 from flask import Flask, g
 from flask import render_template, flash, redirect, url_for
 import json
 
 
+
 DEBUG = True
 PORT = 8000
 
-app = Flask(__name__)
+app = Flask(__name__,instance_relative_config=True)
+
+
+# //////////// mail setup/////////////
+app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'bouznass19@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Afroukh99'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+mail = Mail(app)
+
 app.secret_key = 'myecole.secretkey'
 login_manager = LoginManager()
 
 ##sets up our login for the app
 login_manager.init_app(app)
 login_manager.login_view = '/'
+
 
 # load teacher
 @login_manager.user_loader
@@ -92,16 +107,6 @@ def parentpage(userid):
 
 
 
-# get all students
-@app.route('/students', methods =['GET', 'POST'])
-@app.route('/students/<studentid>', methods =['GET', 'POST'])
-def students(sudentid):
-    # students = models.Student.select().limit(100)
-    student = models.Student.get(models.Student.id == int(studentid))
-    return render_template('students.html', student=student)
- 
-
-
 
 @app.route('/message/<studentid>', methods =['GET', 'POST','PUT'])
 def getstudent(studentid=None):
@@ -110,6 +115,8 @@ def getstudent(studentid=None):
         user = g.user._get_current_object()
         messages = models.Message.select().where(models.Message.student_id==int(studentid))
         form = forms.MessageForm()
+        senderEmail ='bouznass19@gmail.com'
+        receiverEmail = 'bouznass19@gmail.com'
         if form.validate_on_submit():
             if user.role == 'teacher':
                 models.Message.create(
@@ -121,6 +128,9 @@ def getstudent(studentid=None):
                     imageUrl=form.imageUrl.data,
                     student=student
                 )
+                msg = Message("Good Morning , your pyou have a new message",sender=senderEmail,recipients=[receiverEmail])
+                msg.body = f'Hello {student.parent.fullname}, {user.fullname} has sent you this message : {form.text.data}'
+                mail.send(msg)
                 return redirect("/message/{}".format(studentid))
                 # return render_template('student.html',form=form ,student=student, user=user, messages=messages)
             else:
@@ -133,13 +143,37 @@ def getstudent(studentid=None):
                     imageUrl=form.imageUrl.data,
                     student=student
                 )
+                msg = Message("Good Morning , your have a new message from ",sender=senderEmail,recipients=[receiverEmail])
+                msg.body = f'Hello {student.parent.fullname}, {user.fullname} has sent you this message : {form.text.data}'
+                mail.send(msg)
                 # return render_template('student.html',form=form ,student=student, user=user, messages=messages)
                 return redirect("/message/{}".format(studentid))
 
         return render_template('student.html',form=form ,student=student, user=user, messages=messages)
+
+#edit student informations
+# @app.route('/edit-student/<studentid>', methods=['GET','POST'])
+# def edit_student(studentid=None):
+#     student = models.Student.select().where(models.Student.id == int(studentid)).get()
+#     form = forms.EditStudent()
+    
+#     if current_user.role =='parent'
+#         if form.validate_on_submit():
+#             student.medicalNeeds = form.medicalNeeds.data
+#             flash('Your chnges have been saved', 'succes')
+#             return render_template('student.html', form=form,student=student)
+    
+#     return render_template('student.html', form=form,student=student)
+
+
+
+
+
+
 # edit message
 @app.route('/edit-message/<messageid>', methods=['GET','POST'])
 def edit_message(messageid=None):
+    print(messageid)
     message_id = int(messageid)
     message = models.Message.get(models.Message.id == message_id)
     studentid = message.student_id
@@ -148,6 +182,7 @@ def edit_message(messageid=None):
     user = g.user._get_current_object()
     form = forms.MessageForm()
     if form.validate_on_submit():
+        print('form valid')
         message.title= form.title.data
         message.text= form.text.data
         message.imageFile=form.imageFile.data
@@ -155,12 +190,22 @@ def edit_message(messageid=None):
         message.save()
         flash('Your changes have been saved.', 'success')
         # return redirect("/message/{}".format(studentid))
-        return redirect(url_for('message', messageid= message.id))
+        # return redirect(url_for('message', messageid= message.id,form=form))
+        return render_template('student.html',form=form ,student=student,user=user, message=message)
+    if message != None:
+        print('message')
+        print(message.title)
+        form.title.data = message.title
+        form.text.data = message.text
+        form.imageFile.data = message.imageFile
+        form.imageUrl.data = message.imageUrl
+        # form.sender.data = message.sender
+        # form.recipient.data = message.recipient
     
     return render_template('student.html',form=form ,student=student,user=user, message=message)
     
 
-# edit message
+# delete message
 @app.route('/message/<messageid>/delete')
 def delete_message(messageid):
     message_id = int(messageid)
