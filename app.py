@@ -151,20 +151,27 @@ def getstudent(studentid=None):
 
         return render_template('student.html',form=form ,student=student, user=user, messages=messages)
 
+#edit student informations by teacher
+@app.route('/edit-student/<studentid>', methods=['GET','POST'])
+def edit_student(studentid=None):
+    student = models.Student.select().where(models.Student.id == int(studentid)).get()
+    formedit = forms.EditStudent()
+    student.studentLevel = formedit.studentLevel.data
+    student.workingOn = formedit.workingOn.data
+    student.save()
+    flash('Your changes have been saved', 'success')
+    return redirect("/message/{}".format(studentid))
+    
 #edit student informations
-# @app.route('/edit-student/<studentid>', methods=['GET','POST'])
-# def edit_student(studentid=None):
-#     student = models.Student.select().where(models.Student.id == int(studentid)).get()
-#     form = forms.EditStudent()
-    
-#     if current_user.role =='parent'
-#         if form.validate_on_submit():
-#             student.medicalNeeds = form.medicalNeeds.data
-#             flash('Your chnges have been saved', 'succes')
-#             return render_template('student.html', form=form,student=student)
-    
-#     return render_template('student.html', form=form,student=student)
-
+@app.route('/edit-student-parent/<studentid>', methods=['GET','POST'])
+def edit_student_parent(studentid=None):
+    student = models.Student.select().where(models.Student.id == int(studentid)).get()
+    formStudent = forms.EditStudentParent()
+    student.medicalNeeds = formStudent.medicalNeeds.data
+    student.phonenumber = formStudent.phonenumber.data
+    student.save()
+    flash('Your changes have been saved', 'success')
+    return redirect("/message/{}".format(studentid))
 
 
 
@@ -189,9 +196,9 @@ def edit_message(messageid=None):
         message.imageUrl=form.imageUrl.data
         message.save()
         flash('Your changes have been saved.', 'success')
-        # return redirect("/message/{}".format(studentid))
+        return redirect("/message/{}".format(studentid))
         # return redirect(url_for('message', messageid= message.id,form=form))
-        return render_template('student.html',form=form ,student=student,user=user, message=message)
+        # return render_template('student.html',form=form ,student=student,user=user, message=message)
     if message != None:
         print('message')
         print(message.title)
@@ -199,8 +206,6 @@ def edit_message(messageid=None):
         form.text.data = message.text
         form.imageFile.data = message.imageFile
         form.imageUrl.data = message.imageUrl
-        # form.sender.data = message.sender
-        # form.recipient.data = message.recipient
     
     return render_template('student.html',form=form ,student=student,user=user, message=message)
     
@@ -215,7 +220,14 @@ def delete_message(messageid):
 
     return redirect("/message/{}".format(studentid))
 
-
+# school page 
+@app.route('/mySchoolPage/', methods=['GET'])
+def mySchool():
+    # students = models.Student.select().where(models.Student.teacher_id==int(user.id))
+    teachers = models.User.select().where(models.User.role == 'teacher')
+    # user = models.User.get(models.User.id == int(userid))
+    events = models.Event.select().limit(100)
+    return render_template('mySchool.html',teachers=teachers, events=events) 
 
 
 @app.route('/aboutUs')
@@ -270,6 +282,18 @@ if __name__ == '__main__':
             about='sweet',
             role='parent'
             )
+        models.User.create_user(
+            username='Admin',
+            email='admin@gmail.com',
+            fullname ='Admin Man',
+            password='123',
+            profileImgUrl='https://www.lincolntech.edu/news/wp-content/uploads/2015/04/computer-specialist-tw.jpg',
+            phonenumber='5109006656556',
+            address='122 west Oakland ca',
+            about='sweet',
+            is_admin='True',
+            role='teacher'
+            )
         models.Student.create_student(
             teacher=1,
             parent=3,
@@ -280,7 +304,9 @@ if __name__ == '__main__':
             phonenumber='9259002323',
             address='44 North Street West Oakland ca',
             medicalNeeds='Peanut allergy',
-            otherDetails='OTHER STUFFS'
+            otherDetails='OTHER STUFFS',
+            studentLevel= 3,
+            workingOn = 'Numbers'
             )
         models.Student.create_student(
             teacher=1,
@@ -292,7 +318,9 @@ if __name__ == '__main__':
             phonenumber='9259001111',
             address='122 west Oakland ca',
             medicalNeeds='Peanut allergy',
-            otherDetails='OTHER STUFFS'
+            otherDetails='OTHER STUFFS',
+            studentLevel= 4,
+            workingOn = 'Addition'
             )
         models.Student.create_student(
             teacher=2,
@@ -304,7 +332,9 @@ if __name__ == '__main__':
             phonenumber='9259001111',
             address='122 west Oakland ca',
             medicalNeeds='no allergies',
-            otherDetails='OTHER STUFFS'
+            otherDetails='OTHER STUFFS',
+            studentLevel= 1,
+            workingOn = 'Alphabet'
             )
         models.Message.create_message(
             sender=1,
@@ -316,6 +346,19 @@ if __name__ == '__main__':
             imageFile='nothing',
             red=False
             )
+        models.Event.create_event(
+            dateEvent='4-12-2019',
+            title = 'Pijama Day',
+            text='pijama day ',
+            imgUrl ='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmqp-ShLSRkk3Nj-2634MaiUDJzJOIW7-59pKAH04vkmGquqCZ',
+            priority='0')
+        models.Event.create_event(
+            dateEvent='5-12-2019',
+            title = 'Field Trip to Oakland Zoo',
+            text='Field trip',
+            imgUrl = 'https://www.marinmommies.com/sites/default/files/styles/full-width_column_827/public/stories/giraffes2.jpg?itok=m5H44a36',
+            priority='0')
+        
     except ValueError:
         pass
 
