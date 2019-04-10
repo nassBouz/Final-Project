@@ -28,14 +28,14 @@ class User(UserMixin, Model):
         order_by = ('-joined_at',)
         
     @classmethod
-    def create_user(cls, username, email,fullname, password, profileImgUrl,phonenumber, address,about,role,admin=False):
+    def create_user(cls, username, email,fullname, password, profileImgUrl,phonenumber, address,about,role,is_admin=False):
         try:
             cls.create(
                 username=username,
                 email=email,
                 fullname =fullname,
                 password=generate_password_hash(password),
-                is_admin=admin,
+                is_admin=is_admin,
                 profileImgUrl=profileImgUrl,
                 phonenumber=phonenumber,
                 address=address,
@@ -47,9 +47,6 @@ class User(UserMixin, Model):
 
     def get_students(self):
         return Student.select().where((Student.user == self))
-
-
-
 
 
 # ------------------- ----------------------------------- #
@@ -76,13 +73,14 @@ class Student(Model):
     medicalNeeds= CharField(max_length=300)
     phonenumber = CharField(max_length=15)
     profileImgUrl = CharField(default='static/userDefault.png')
-   
+    studentLevel= IntegerField(default=0)
+    workingOn = CharField()
     class Meta:
         database = DATABASE
         order_by = ('-joined_at',)
         
     @classmethod
-    def create_student(cls,teacher,parent,fullname,gender, dateOfBirth, profileImgUrl,phonenumber, address,medicalNeeds, otherDetails):
+    def create_student(cls,teacher,parent,fullname,gender, dateOfBirth, profileImgUrl,phonenumber, address,medicalNeeds, otherDetails,studentLevel,workingOn):
         try:
             cls.create(
                 teacher=teacher,
@@ -94,7 +92,9 @@ class Student(Model):
                 phonenumber=phonenumber,
                 address=address,
                 medicalNeeds=medicalNeeds,
-                otherDetails=otherDetails
+                otherDetails=otherDetails,
+                workingOn=workingOn,
+                studentLevel=studentLevel
             )
         except IntegrityError:
             raise ValueError("Student already exists")
@@ -105,25 +105,28 @@ class Student(Model):
 # ------------------- Classe Model --------------------- #
 # ------------------- ----------------------------------- #
 class Classe(Model):
+    teacher = ForeignKeyField( 
+        model=User, 
+        backref='classes'
+    )
     classname = CharField(max_length=120)
-    joined_at = DateTimeField(default=datetime.datetime.now())
+    created_at = DateTimeField(default=datetime.datetime.now())
     grad= IntegerField()
     classroomNumber = IntegerField()
-    profileImgUrl = CharField(default='static/userDefault.png')
     start_from = DateField()
     end_date= DateField()
 
-   
     class Meta:
         database = DATABASE
-        order_by = ('-joined_at',)
+        order_by = ('-created_at',)
         
     @classmethod
-    def create_classe(cls,classname,grad,classroomNumber, profileImgUrl,start_from,end_date):
+    def create_classe(cls,teacher,classname,grad,classroomNumber, profileImgUrl,start_from,end_date):
         try:
             cls.create(
                 classname = classname,
                 grad=grad,
+                teacher=teacher,
                 classroomNumber=classroomNumber,
                 profileImgUrl=profileImgUrl,
                 start_from=start_from,
@@ -149,7 +152,7 @@ class Message(Model):
     red= BooleanField(default=False)
     class Meta:
         database = DATABASE
-        order_by = ('-mesageDate',)
+        order_by = ('mesageDate',)
         
     @classmethod
     def create_message(cls,recipient,sender,title, text,imageUrl,imageFile,student,red=False):
@@ -171,11 +174,11 @@ class Message(Model):
 # ------------------- ----------------------------------- #
 class StudentClasse(Model):
     classe = ForeignKeyField( model=Classe,backref='StudentClasses')
-    student= ForeignKeyField( model=User,backref='StudentClasses')
+    student= ForeignKeyField( model=Student,backref='StudentClasses')
     dateFrom = DateField()
     dateTo= DateField()
     dateCreated= DateTimeField(default=datetime.datetime.now())
-    studentLevel= IntegerField()
+   
     class Meta:
         database = DATABASE
         order_by = ('-dateCreated',)
@@ -194,8 +197,46 @@ class StudentClasse(Model):
         except IntegrityError:
             raise ValueError("studentClass already exists")
 
+# ------------------- ----------------------------------- #
+# ------------------- Post Model --------------------- #
+# ------------------- ----------------------------------- #
+
+class Event(Model):
+    dateEventCreated = DateTimeField(default=datetime.datetime.now())
+    # user = ForeignKeyField(
+    #     model=User,
+    #     backref='events'
+    # )
+    dateEvent = DateField()
+    title = TextField()
+    text = TextField()
+    imgUrl = CharField()
+    priority = IntegerField(default=0)
+
+    class Meta:
+        database = DATABASE
+        order_by = ('-priority',)
+    @classmethod
+    def create_event(cls,dateEvent,title,text,imgUrl,priority):
+        try:
+            cls.create(
+                dateEvent=dateEvent,
+                title=title,
+                text=text,
+                imgUrl=imgUrl,
+                priority=priority
+            )
+        except IntegrityError:
+            raise ValueError("event already exists")
+
+
+class UserUpVote(Model):
+    user_id= IntegerField()
+    event_id= IntegerField()
+    class Meta:
+        database = DATABASE
 
 def initialize():
     DATABASE.connect()
-    DATABASE.create_tables([User,Classe,Message,StudentClasse,Student], safe=True)
+    DATABASE.create_tables([User,Classe,Message,StudentClasse,Student, UserUpVote,Event], safe=True)
     DATABASE.close()  
