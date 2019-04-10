@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
     <!--  css file  -->
-   
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
     <!-- bootstrap cdn  -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -35,7 +35,6 @@
                     <a class="navbar-brand" href="{{ url_for('index') }}">
                         <img id="logo" src={{url_for("static", filename= "logoMyEcole.png")}} width='78' height='65' alt="">
                     </a>
-                    
                     <span class="navbar-text">Welcome</span>
                     
                     <a class="button" href="{{ url_for ('aboutUs') }}"><span>About Us</span></a>
@@ -52,13 +51,15 @@
                     </div>
                 <!-- ///////////teacher//////////// -->
                 {% if current_user.is_authenticated  and current_user.role=='teacher' %}
-                    <a>{{current_user.username}}</a>
+                    <a>Welcome {{current_user.username}}</a>
                     <a id="anchor" href={{url_for('profilepage', userid=current_user.id)}}><h3> My Students</h3></a>
+                    <a id="anchor3" href={{url_for('mySchool')}}><h3> school page</h3></a>
                     <a href="{{url_for('logout')}}"> <button class="btn btn-dark">teacher Sign Out</button></a>
                 <!-- ////////////parent////////////// -->
                 {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
                 <a>{{current_user.username}}</a>
                     <a id="anchor" href={{url_for('parentpage', userid=current_user.id)}}><h3> My Kids</h3></a>
+                    <a id="anchor2" href={{url_for('mySchool')}}><h3> school page</h3></a>
                     <a href="{{url_for('logout')}}"> <button class="btn btn-dark">parent Sign Out</button></a>
                 {%else%}
                     <div class= "SignIn">
@@ -98,6 +99,10 @@
                         {% block mystudentDetail %}
                         {% endblock %}
                 </div>
+                <div class="schoolpage">
+                    {% block mySchool %}
+                    {% endblock %}
+                </div>
                 
             {% elif current_user.is_authenticated and current_user.role=='parent' %}
                 <div class="modal-body">
@@ -107,8 +112,11 @@
                 <div class="myKidsDetails"></div>
                     {% block myKidsDetail %}
                     {% endblock %}
-                 </div>
-                
+                </div>
+                <div class="schoolpageforParent">
+                    {% block mySchoolforparent %}
+                    {% endblock %}
+                </div>
             {% endif %}
     </div>
     <footer>
