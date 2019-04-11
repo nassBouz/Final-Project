@@ -222,10 +222,134 @@ def mySchool():
 def aboutUs():
     return render_template('aboutUs.html')
 
-    
+
 if 'ON_HEROKU' in os.environ:
     print('hitting ')
     models.initialize()
+    try:
+        models.User.create_user(
+            username='brown',
+            email="brown@ga.com",
+            password='123',
+            fullname= 'Brown Katia',
+            address='12 west street Oakland CA',
+            phonenumber='2042334343',
+            about='I have 5 years experience',
+            profileImgUrl= 'https://www.opticalexpress.co.uk/images/feature-imgs/lady-with-glasses-smiling.jpg',
+            role='teacher'
+            )
+        models.User.create_user(
+            username='Jeff',
+            email="jeff@ga.com",
+            password='123',
+            fullname= 'Jeff Habib',
+            address='23 west street Oakland CA',
+            phonenumber='212334390008',
+            about='I have 2 years experience working with kids',
+            profileImgUrl= 'http://interactive.nydailynews.com/2016/05/simpsons-quiz/img/simp1.jpg',
+            role='teacher'
+            )
+        models.User.create_user(
+            username='nassBouz',
+            email='bouzianenassima@gmail.com',
+            fullname ='Nassima Bouz ',
+            password='123',
+            profileImgUrl='http://thewildmagazine.com/wp-content/uploads/2012/01/DSC5526-copy.jpeg',
+            phonenumber='51090095454',
+            address='44 North Street West Oakland ca',
+            about='here',
+            role='parent'
+            )
+        models.User.create_user(
+            username='zola',
+            email='zola@gmail.com',
+            fullname ='Cherik Zola',
+            password='123',
+            profileImgUrl='https://www.rd.com/wp-content/uploads/2017/09/01-shutterstock_476340928-Irina-Bg-1024x683.jpg',
+            phonenumber='510900667754',
+            address='122 west Oakland ca',
+            about='sweet',
+            role='parent'
+            )
+        models.User.create_user(
+            username='Admin',
+            email='admin@gmail.com',
+            fullname ='Admin Man',
+            password='123',
+            profileImgUrl='https://www.lincolntech.edu/news/wp-content/uploads/2015/04/computer-specialist-tw.jpg',
+            phonenumber='5109006656556',
+            address='122 west Oakland ca',
+            about='sweet',
+            is_admin='True',
+            role='teacher'
+            )
+        models.Student.create_student(
+            teacher=1,
+            parent=3,
+            fullname='Bouz Yanni',
+            gender='male',
+            dateOfBirth='03-04-2013',
+            profileImgUrl='https://images.theconversation.com/files/50558/original/t739v7sc-1402311181.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip',
+            phonenumber='9259002323',
+            address='44 North Street West Oakland ca',
+            medicalNeeds='Peanut allergy',
+            otherDetails='OTHER STUFFS',
+            studentLevel= 3,
+            workingOn = 'Numbers'
+            )
+        models.Student.create_student(
+            teacher=1,
+            parent=4,
+            fullname='Cherik Zira',
+            gender='female',
+            dateOfBirth='03-04-2012',
+            profileImgUrl='https://static1.bigstockphoto.com/4/3/2/large1500/234733213.jpg',
+            phonenumber='9259001111',
+            address='122 west Oakland ca',
+            medicalNeeds='Peanut allergy',
+            otherDetails='OTHER STUFFS',
+            studentLevel= 4,
+            workingOn = 'Addition'
+            )
+        models.Student.create_student(
+            teacher=2,
+            parent=4,
+            fullname='Cherik Fazia',
+            gender='female',
+            dateOfBirth='03-04-2015',
+            profileImgUrl='http://i0.wp.com/sguru.org/wp-content/uploads/2017/02/cute-girls-profile-pics-for-facebook-13.jpg',
+            phonenumber='9259001111',
+            address='122 west Oakland ca',
+            medicalNeeds='no allergies',
+            otherDetails='OTHER STUFFS',
+            studentLevel= 1,
+            workingOn = 'Alphabet'
+            )
+        models.Message.create_message(
+            sender=1,
+            recipient=3,
+            student=1,
+            title="Bad behavior",
+            text="your son is recently behaving really bad !! please take action or i am gonna take disciblinary actions ",
+            imageUrl="none",
+            imageFile='nothing',
+            red=False
+            )
+        models.Event.create_event(
+            dateEvent='4-12-2019',
+            title = 'Pijama Day',
+            text='pijama day ',
+            imgUrl ='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmqp-ShLSRkk3Nj-2634MaiUDJzJOIW7-59pKAH04vkmGquqCZ',
+            priority='0')
+        models.Event.create_event(
+            dateEvent='5-12-2019',
+            title = 'Field Trip to Oakland Zoo',
+            text='Field trip',
+            imgUrl = 'https://www.marinmommies.com/sites/default/files/styles/full-width_column_827/public/stories/giraffes2.jpg?itok=m5H44a36',
+            priority='0')
+        
+    except ValueError:
+        pass
 
 
 if __name__ == '__main__':
