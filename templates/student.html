@@ -4,25 +4,27 @@
 
 {% block mystudentDetail %}
 
-  <div class="card mb-3" style="max-width: 20rem">
-      <div class="row no-gutters">
-            <div class="col-md-4">
-                <img style="max-width: 18rem;" id="profile-img" src={{student.profileImgUrl}} />
-            </div>
-            <div class="col-md-8"></div>
-              <div class="card-body">
-                  <h5 class="card-title"> {{ student.fullname }} profile : </h5>
-                  <p class="card-text" >Full Name: {{ student.fullname }}</p>
-                  <p class="card-text">Student Date of Birth: {{ student.dateOfBirth }}</p>
-                  <p class="card-text">Student Address: {{ student.address }}</p>
-                  <p class="card-text">Student level: {{ student.studentLevel }}</p>
-                  <p class="card-text">Student workong on : {{ student.workingOn }}</p>
-                  <p class ="card-text">Medical Needs: {{student.medicalNeeds}} </p>
-              </div>
-      </div>
+<div class="card mb-3" >
+    <div class="row ">
+        <div class="col-md-4">
+          <div class="img-wrapper">
+            <img id="profile-img" class="rounded mx-auto d-block " src={{student.profileImgUrl}} />
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+              <h5 class="card-title"> {{ student.fullname }} profile : </h5>
+              <p class="card-text" >Full Name: {{ student.fullname }}</p>
+              <p class="card-text">Student Date of Birth: {{ student.dateOfBirth }}</p>
+              <p class="card-text">Student Address: {{ student.address }}</p>
+              <p class="card-text">Student level: {{ student.studentLevel }}</p>
+              <p class="card-text">Student workong on : {{ student.workingOn }}</p>
+              <p class ="card-text">Medical Needs: {{student.medicalNeeds}} </p>
+              <a href=# ><button  class="btn btn-dark" data-toggle="modal" data-target="#studentedit">Edit student</button></a>
+          </div>
+        </div>
          <!-- edit student Modal -->
       <div class= "StudentEdit">
-        <a href=# ><button  class="btn btn-dark" data-toggle="modal" data-target="#studentedit">edit student</button></a>
         <div class="modal fade" id="studentedit" tabindex="-1" role="dialog" aria-labelledby="editStud" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -51,23 +53,23 @@
         </div>
       </div><!-- end of edit modal -->
   </div>   
-    
+</div>
 
     {% if messages %}
-        <div id="messagesSection">
-            <h4>{{ student.fullname }}  has {{ messages.count() }} Messages</h4>
+        <div id="messagesSection" style="margin-top: 50px;">
+            <h4>{{ student.fullname }}  has <span class="badge badge-primary">{{ messages.count() }}</span>  Messages</h4>
             {% for message in messages %}
               {% if current_user == message.sender%}
-                <div class="messagebox" style="background-color:powderblue;">
+                <div class="messagebox">
                     <div>
-                        <p>Title: {{message.title}}</p>
-                        <p>text: {{message.text}}</p>
+                        <h5> {{message.title}}</h5>
+                        <p> {{message.text}}</p>
                     </div>
                     {% if message.imageUrl != 'noImage' %}
                       <h6>here the image</h6><img src={{message.imageUrl}}>
                     {%endif%}
                     <div>
-                        <p>By: {{message.sender.username}}</p>
+                        <span>From  {{message.sender.username}}</span>
                     </div>
                      <!-- Modal edit message  -->
                     <a href="#"><button  class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter{{ message.id }}">edit message</button></a>
@@ -96,7 +98,7 @@
                     <a href={{url_for('delete_message', messageid=message.id)}}><button class="btn btn-danger" id="submitButton">Delete</button></a>
                 </div>
               {% else %}
-                <div class="messagebox" style="background-color:yellow;">
+                <div class="messagebox" style="background-color: #ededf9;">
                     <div>
                         <p>Title: {{message.title}}</p>
                         <p>text: {{message.text}}</p>

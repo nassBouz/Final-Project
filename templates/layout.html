@@ -15,39 +15,40 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
-    <!--  css file  -->
-    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
     <!-- bootstrap cdn  -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+
+    <!--  css file  -->
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+    
     <!-- my js file -->
-   
     <title>MyEcole</title>
 </head>
 <body>
     <div class="content">
     <!--###############  Begin of Nav bar regular ########### -->
         <header>
-            <nav class="navbar navbar-expand-lg  navbar-light" style="background-color: rgb(40, 50, 115); color: white;">
+            <nav class="navbar navbar-expand-lg navbar-light">
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href=#><img id="logo" src={{url_for("static", filename= "myecool.png")}} width='78' height='65' alt=""></a>
+                            <a class="nav-link" href=#><img id="logo" src={{url_for("static", filename= "logo3.png")}} width='50' height='50' alt=""></a>
                         </li>
+                    </ul>
+                    
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <a id="aboutLink" class="nav-link" href="{{ url_for ('aboutUs') }} ">About Us</a>
                         </li>
                         
                         <!-- ///////////teacher//////////// -->
-                        {% if current_user.is_authenticated  and current_user.role=='teacher' %}
-                        <li class="nav-item">
-                            <a>Welcome {{current_user.username}}</a>
-                        </li>
+                    {% if current_user.is_authenticated  and current_user.role=='teacher' %}
                         <li class="nav-item">
                             <a class="nav-link" href={{url_for('profilepage', userid=current_user.id)}}> My Students</a>
                         </li>
@@ -55,13 +56,10 @@
                             <a class="nav-link" href={{url_for('mySchool')}}>School page</a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url_for('logout')}}">Sign Out</a>
+                            <a class="nav-link" href="{{url_for('logout')}}">Sign Out</a>
                         </li>
                         <!-- ////////////parent////////////// -->
-                        {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
-                        <li class="nav-item">
-                            <a>Welcome {{current_user.username}}</a>
-                        </li>
+                    {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
                         <li class="nav-item">
                             <a id="anchor" href={{url_for('parentpage', userid=current_user.id)}}> My Kids</a>
                         </li>
@@ -69,80 +67,57 @@
                             <a id="anchor2" href={{url_for('mySchool')}}>School page</a>
                         </li> 
                         <li class="nav-item"> 
-                            <a href="{{url_for('logout')}}">Sign Out</a>
+                            <a class="nav-link" href="{{url_for('logout')}}">Sign Out</a>
                         </li>
-                    </ul>
                     {%else%}
-                    <ul class="nav navbar-nav navbar-right">
-                            <div class= "SignIn">
-                             <!-- <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SignIn">Sign In</button> -->
-                             <li class="nav-item"> 
-                                 <span class="glyphicon glyphicon-user"></span><a data-toggle="modal" data-target="#SignIn">Login</a>
-                             </li>
-                             
-                                <!-- Modal -->
-                                <div class="modal fade" id="SignIn" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header" id="modal-header">
-                                                <h3 class="modal-title" id="SignInModalTitle">Sign In</h3>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                {% block signin %}
-                                                {% endblock %}
-                                            </div>
+                        <li class="nav-item"> 
+                            <span class="glyphicon glyphicon-user"></span><a data-toggle="modal" data-target="#SignIn">Login</a>
+                        
+                            <!-- Modal -->
+                            <div class="modal fade" id="SignIn" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" id="modal-header">
+                                            <h3 class="modal-title" id="SignInModalTitle">Sign In</h3>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            {% block signin %}
+                                            {% endblock %}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                           
-                        {% endif %} 
+                        </li>
+                    {% endif %} 
                 </ul>
-                </div>
-            </nav>
+            </div>
+        </nav>
     <div class= "container" >
-           <!-- display error message -->
-           <!-- <div class="alert error_message">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                    <a href = "#" class = "close" data-dismiss = "alert">
-                        <div class={{category}}>{{ message }}</div> &times;
-                    </a>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-        </div> -->
         <!-- display error/succes -->
-
-<div class="container mt-3">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                {% if category == 'success'%}
-                    <div class="alert alert-success mb-3 " role="alert">
-                        <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
-                        {{ message }}
-                    </div>
-                {% endif %}
-                {% if category == 'error'%}
-                    <div class="alert alert-danger mb-3 " role="alert">
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'success'%}
+                        <div class="alert alert-success mb-3 " role="alert">
                             <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
-                        {{ message }}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-</div>
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                    {% if category == 'error'%}
+                        <div class="alert alert-danger mb-3 " role="alert">
+                                <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
+                            {{ message }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 
-
-
-
-       
             {% if not current_user.is_authenticated %}
                 <section id="aboutWrap">
                     <h2>About</h2>
@@ -153,9 +128,9 @@
                     {% block myStudents%}
                     {% endblock %}
                 </div>
-                <div class="mystudentDeatlss">
-                        {% block mystudentDetail %}
-                        {% endblock %}
+                <div class="myStudentDetails">
+                    {% block mystudentDetail %}
+                    {% endblock %}
                 </div>
                 <div class="schoolpage">
                     {% block mySchool %}
@@ -206,7 +181,7 @@
     <!-- ////// -->
     
     <!-- //////// -->
-<footer id="foooter" class="page-footer" style="background-color: rgb(40, 50, 115); color: white;">
+<footer id="foooter" class="page-footer" style="background-color: #2e3192; color: #e6e6e6;">
 
     <!-- Footer Elements -->
     <div class="container">

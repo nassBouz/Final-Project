@@ -104,9 +104,6 @@ def parentpage(userid):
     messages = models.Message.select().where(models.Message.recipient_id == int(userid))
     return render_template('parent.html', user=user,students=students, messages=messages)
 
-
-
-
 @app.route('/message/<studentid>', methods =['GET', 'POST','PUT'])
 def getstudent(studentid=None):
     if studentid != None :
@@ -127,7 +124,7 @@ def getstudent(studentid=None):
                     imageUrl=form.imageUrl.data,
                     student=student
                 )
-                msg = Message("Good Morning , your pyou have a new message",sender=senderEmail,recipients=[receiverEmail])
+                msg = Message("Hi, your have a new message from ",sender=senderEmail,recipients=[receiverEmail])
                 msg.body = f'Hello {student.parent.fullname}, {user.fullname} has sent you this message : {form.text.data}'
                 mail.send(msg)
                 flash("Your message has successefully been sent" , "success")
@@ -224,6 +221,11 @@ def mySchool():
 @app.route('/aboutUs')
 def aboutUs():
     return render_template('aboutUs.html')
+
+    
+if 'ON_HEROKU' in os.environ:
+    print('hitting ')
+    models.initialize()
 
 
 if __name__ == '__main__':

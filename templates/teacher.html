@@ -1,37 +1,41 @@
 {% extends "layout.html" %}
 
 {% block myStudents %}
-    <div class="profile-div" id="my-students">
-        <h5 class="post-title">My Students</h5>
-        {% if students %}    
-            {% for student in students %}
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <a href={{url_for('getstudent', studentid=student.id)}}>{{student.fullname}}</a>
-                        <p>{{student.parent.fullname}}</p>
-                        <span class="badge badge-primary badge-pill">{{messages.count()}}</span>
-                    </li>
-                </ul>
-            {% endfor %}
-        {% endif %}
-    </div>
-    <div class="card mb-3" style="max-width: 18rem">
-        <div class="row no-gutters">
+<div class="card mb-3" >
+        <div class="row ">
             <div class="col-md-4">
-                <img style="max-width: 18rem;" id="profile-img" src={{user.profileImgUrl}} />
+                <img style="max-width: 15rem;" id="profile-img" src={{user.profileImgUrl}} />
             </div>
-            <div class="col-md-8"></div>
+            <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title">My Profile</h5>
                     <p class="card-text" >Full Name: {{ user.fullname }}</p>
                     <p class="card-text">User Name: {{ user.username }}</p>
                     <p class="card-text">Email Address: {{ user.email }}</p>
                     <p class="card-text">Joined On : <time data-time="{{ user.joined_at }}" class="distime" datetime="{{ user.joined_at.strftime('%Y-%m-%d') }}">{{ user.joined_at.strftime('%Y-%m-%d') }}</time></p>
+                    <button href="#" type="button" class="btn btn-light">Edit my Information</button>
                 </div>
-                <a href="#" class="btn  btn-primary">Edit my Information</a>
             </div>
         </div>
     </div>
+
+
+    <div class="profile-div" id="my-students">
+        <h5 class="post-title">My Students</h5>
+        {% if students %}    
+            {% for student in students %}
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <img style="max-width: 3rem;" id="profile-img"  src={{student.profileImgUrl}} alt="Generic placeholder image">
+                        <a href={{url_for('getstudent', studentid=student.id)}}>{{student.fullname}}</a>
+                        <p>Parent name: {{student.parent.fullname}}</p>
+                        <span class="badge badge-primary badge-pill">{{student.messages.count()}}</span>
+                    </li>
+                </ul>
+            {% endfor %}
+        {% endif %}
+    </div>
+   
 {% endblock %}
 
 
