@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- favicon -->
-    <link rel="shortcut icon"  href='static/iconeMyEcole.ico' />
+    <link rel="shortcut icon"  href='static/logo2.png' />
     <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -30,61 +30,119 @@
     <div class="content">
     <!--###############  Begin of Nav bar regular ########### -->
         <header>
-            <nav class="navbar navbar-light bg-light">
-                    
-                    <a class="navbar-brand" href="{{ url_for('index') }}">
-                        <img id="logo" src={{url_for("static", filename= "logoMyEcole.png")}} width='78' height='65' alt="">
-                    </a>
-                    <span class="navbar-text">Welcome</span>
-                    
-                    <a class="button" href="{{ url_for ('aboutUs') }}"><span>About Us</span></a>
-                    
-                    <!-- display error message -->
-                    <div id="error_message">
-                        {% with messages = get_flashed_messages(with_categories=true) %}
-                            {% if messages %}
-                                {% for category, message in messages %}
-                                    <div class={{category}}>{{ message }}</div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endwith %}
-                    </div>
-                <!-- ///////////teacher//////////// -->
-                {% if current_user.is_authenticated  and current_user.role=='teacher' %}
-                    <a>Welcome {{current_user.username}}</a>
-                    <a id="anchor" href={{url_for('profilepage', userid=current_user.id)}}><h3> My Students</h3></a>
-                    <a id="anchor3" href={{url_for('mySchool')}}><h3> school page</h3></a>
-                    <a href="{{url_for('logout')}}"> <button class="btn btn-dark">teacher Sign Out</button></a>
-                <!-- ////////////parent////////////// -->
-                {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
-                <a>{{current_user.username}}</a>
-                    <a id="anchor" href={{url_for('parentpage', userid=current_user.id)}}><h3> My Kids</h3></a>
-                    <a id="anchor2" href={{url_for('mySchool')}}><h3> school page</h3></a>
-                    <a href="{{url_for('logout')}}"> <button class="btn btn-dark">parent Sign Out</button></a>
-                {%else%}
-                    <div class= "SignIn">
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SignIn">Sign In</button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="SignIn" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header" id="modal-header">
-                                        <h3 class="modal-title" id="SignInModalTitle">Sign In</h3>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        {% block signin %}
-                                        {% endblock %}
+            <nav class="navbar navbar-expand-lg  navbar-light" style="background-color: rgb(40, 50, 115); color: white;">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href=#><img id="logo" src={{url_for("static", filename= "myecool.png")}} width='78' height='65' alt=""></a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="aboutLink" class="nav-link" href="{{ url_for ('aboutUs') }} ">About Us</a>
+                        </li>
+                        
+                        <!-- ///////////teacher//////////// -->
+                        {% if current_user.is_authenticated  and current_user.role=='teacher' %}
+                        <li class="nav-item">
+                            <a>Welcome {{current_user.username}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href={{url_for('profilepage', userid=current_user.id)}}> My Students</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href={{url_for('mySchool')}}>School page</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{url_for('logout')}}">Sign Out</a>
+                        </li>
+                        <!-- ////////////parent////////////// -->
+                        {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
+                        <li class="nav-item">
+                            <a>Welcome {{current_user.username}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="anchor" href={{url_for('parentpage', userid=current_user.id)}}> My Kids</a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="anchor2" href={{url_for('mySchool')}}>School page</a>
+                        </li> 
+                        <li class="nav-item"> 
+                            <a href="{{url_for('logout')}}">Sign Out</a>
+                        </li>
+                    </ul>
+                    {%else%}
+                    <ul class="nav navbar-nav navbar-right">
+                            <div class= "SignIn">
+                             <!-- <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SignIn">Sign In</button> -->
+                             <li class="nav-item"> 
+                                 <span class="glyphicon glyphicon-user"></span><a data-toggle="modal" data-target="#SignIn">Login</a>
+                             </li>
+                             
+                                <!-- Modal -->
+                                <div class="modal fade" id="SignIn" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header" id="modal-header">
+                                                <h3 class="modal-title" id="SignInModalTitle">Sign In</h3>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {% block signin %}
+                                                {% endblock %}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                {% endif %} 
+                           
+                        {% endif %} 
+                </ul>
+                </div>
             </nav>
-           
+    <div class= "container" >
+           <!-- display error message -->
+           <!-- <div class="alert error_message">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                    <a href = "#" class = "close" data-dismiss = "alert">
+                        <div class={{category}}>{{ message }}</div> &times;
+                    </a>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div> -->
+        <!-- display error/succes -->
+
+<div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'success'%}
+                    <div class="alert alert-success mb-3 " role="alert">
+                        <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+                {% if category == 'error'%}
+                    <div class="alert alert-danger mb-3 " role="alert">
+                            <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+
+
+
+       
             {% if not current_user.is_authenticated %}
                 <section id="aboutWrap">
                     <h2>About</h2>
@@ -109,7 +167,7 @@
                     {% block mykids%}
                     {% endblock %}
                 </div>
-                <div class="myKidsDetails"></div>
+                <div class="myKidsDetails">
                     {% block myKidsDetail %}
                     {% endblock %}
                 </div>
@@ -119,8 +177,77 @@
                 </div>
             {% endif %}
     </div>
-    <footer>
-        &copy;2019 Nassima
-    </footer>
+
+</div>
+
+
+    <!-- <footer>
+        &copy;2019 Nassima myEcole. All Rights Reserved
+        <div class="social-icons">
+                <a href="https://itunes.apple.com/" target="_blank">
+                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_footer_apple.svg">
+                </a>
+                <a href="https://play.google.com/store/apps/" target="_blank">
+    			    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_android_footer.svg">
+                </a>
+                <a href="https://facebook.com/" target="_blank">
+                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_facebook_footer.svg">
+                </a>
+                <a href="https://twitter.com/" target="_blank">
+                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_twitter_footer.svg">
+                </a>
+    			<a href="https://www.linkedin.com/in/nassima-bouziane/" target="_blank">
+                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_linkedin_footer.svg">
+                </a>
+    		</div>
+    </footer> -->
+
+    <!-- Footer -->
+    <!-- ////// -->
+    
+    <!-- //////// -->
+<footer id="foooter" class="page-footer" style="background-color: rgb(40, 50, 115); color: white;">
+
+    <!-- Footer Elements -->
+    <div class="container">
+
+     <!-- Social buttons -->
+    <ul class="list-unstyled list-inline text-center">
+        <li class="list-inline-item">
+          <a class="btn-floating btn-fb mx-1">
+            <i class="fab fa-facebook-f"> </i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn-floating btn-tw mx-1">
+            <i class="fab fa-twitter"> </i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a class="btn-floating btn-gplus mx-1">
+            <i class="fab fa-google-plus-g"> </i>
+          </a>
+        </li>
+        <li class="list-inline-item">
+          <a link="https://www.linkedin.com/in/nassima-bouziane/"  class="btn-floating btn-li mx-1">
+            <i class="fab fa-linkedin-in"> </i>
+          </a>
+        </li>
+       
+        &copy;2019 Nassima myEcole. All Rights Reserved
+      </ul>
+      <!-- Social buttons -->
+
+    </div>
+    <!-- Footer Elements -->
+
+    <!-- Copyright -->
+    <!-- <div class="footer-copyright text-center py-3">© 2019 Copyright:
+      <a href="https://github.com/nassBouz/Final-Project"> mySchool</a>
+    </div> -->
+    <!-- Copyright -->
+
+  </footer>
+  <!-- Footer -->
 </body>
 </html>

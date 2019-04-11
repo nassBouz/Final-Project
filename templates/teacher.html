@@ -9,9 +9,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <a href={{url_for('getstudent', studentid=student.id)}}>{{student.fullname}}</a>
                         <p>{{student.parent.fullname}}</p>
-                        {% if messages %}
-                        <span class="badge badge-primary badge-pill">messages : {{messages.count()}}</span>
-                        {% endif%}
+                        <span class="badge badge-primary badge-pill">{{messages.count()}}</span>
                     </li>
                 </ul>
             {% endfor %}

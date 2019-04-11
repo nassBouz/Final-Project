@@ -62,27 +62,24 @@ def after_request(response):
 # signin teacher
 def handle_signin(form):
     try:
-        print(form.email.data)
         user = models.User.get(models.User.email == form.email.data)
     except models.DoesNotExist:
-        flash("teacher your email or password doesn't match", "error")
+        flash("your email or password doesn't match", "error")
     else:
         if check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash('Hi teacher! You have successfully Signed In!!!', 'success signin')
+            flash('You have successfully Signed In!!!', 'success')
             return redirect(url_for('index'))
-            # return render_template('aboutUs.html')
         else:
             flash("your email or password doesn't match", "error")
 
 # landing page 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    print(current_user)
     sign_in_form = forms.SignInForm()
     if sign_in_form.validate_on_submit():
         handle_signin(sign_in_form)
-        return redirect(url_for('index'))
+        return redirect(url_for('mySchool'))
     return render_template('auth.html', sign_in_form=sign_in_form)
 
 
@@ -97,13 +94,15 @@ def logout():
 def profilepage(userid):
     user = models.User.get(models.User.id == int(userid))
     students = models.Student.select().where(models.Student.teacher_id==int(user.id))
-    return render_template('teacher.html', user=user ,students=students) 
+    messages = models.Message.select().where(models.Message.recipient_id == int(userid))
+    return render_template('teacher.html', user=user ,students=students, messages=messages) 
 
 @app.route('/parentprofile/<userid>', methods=['GET'])
 def parentpage(userid):
     user = models.User.get(models.User.id == int(userid))
     students = models.Student.select().where(models.Student.parent_id==int(user.id))
-    return render_template('parent.html', user=user,students=students)
+    messages = models.Message.select().where(models.Message.recipient_id == int(userid))
+    return render_template('parent.html', user=user,students=students, messages=messages)
 
 
 
@@ -131,8 +130,8 @@ def getstudent(studentid=None):
                 msg = Message("Good Morning , your pyou have a new message",sender=senderEmail,recipients=[receiverEmail])
                 msg.body = f'Hello {student.parent.fullname}, {user.fullname} has sent you this message : {form.text.data}'
                 mail.send(msg)
+                flash("Your message has successefully been sent" , "success")
                 return redirect("/message/{}".format(studentid))
-                # return render_template('student.html',form=form ,student=student, user=user, messages=messages)
             else:
                 models.Message.create(
                     sender= user.id,
@@ -146,7 +145,7 @@ def getstudent(studentid=None):
                 msg = Message("Good Morning , your have a new message from ",sender=senderEmail,recipients=[receiverEmail])
                 msg.body = f'Hello {student.parent.fullname}, {user.fullname} has sent you this message : {form.text.data}'
                 mail.send(msg)
-                # return render_template('student.html',form=form ,student=student, user=user, messages=messages)
+                flash("Your message has successefully been sent" , "success")
                 return redirect("/message/{}".format(studentid))
 
         return render_template('student.html',form=form ,student=student, user=user, messages=messages)
@@ -162,7 +161,7 @@ def edit_student(studentid=None):
     flash('Your changes have been saved', 'success')
     return redirect("/message/{}".format(studentid))
     
-#edit student informations
+#edit student informations by parent
 @app.route('/edit-student-parent/<studentid>', methods=['GET','POST'])
 def edit_student_parent(studentid=None):
     student = models.Student.select().where(models.Student.id == int(studentid)).get()
@@ -174,22 +173,16 @@ def edit_student_parent(studentid=None):
     return redirect("/message/{}".format(studentid))
 
 
-
-
-
-# edit message
+# edit own message by parent or teacher
 @app.route('/edit-message/<messageid>', methods=['GET','POST'])
 def edit_message(messageid=None):
-    print(messageid)
     message_id = int(messageid)
     message = models.Message.get(models.Message.id == message_id)
     studentid = message.student_id
-    print('there is the student id in edit:', studentid)
     student = models.Student.get_by_id(int(studentid))
     user = g.user._get_current_object()
     form = forms.MessageForm()
     if form.validate_on_submit():
-        print('form valid')
         message.title= form.title.data
         message.text= form.text.data
         message.imageFile=form.imageFile.data
@@ -200,8 +193,6 @@ def edit_message(messageid=None):
         # return redirect(url_for('message', messageid= message.id,form=form))
         # return render_template('student.html',form=form ,student=student,user=user, message=message)
     if message != None:
-        print('message')
-        print(message.title)
         form.title.data = message.title
         form.text.data = message.text
         form.imageFile.data = message.imageFile
@@ -210,14 +201,14 @@ def edit_message(messageid=None):
     return render_template('student.html',form=form ,student=student,user=user, message=message)
     
 
-# delete message
+# delete message by owner
 @app.route('/message/<messageid>/delete')
 def delete_message(messageid):
     message_id = int(messageid)
     message = models.Message.get(models.Message.id == message_id)
     studentid = message.student_id
     message.delete_instance()
-
+    flash("message successfully deleted ", "success")
     return redirect("/message/{}".format(studentid))
 
 # school page 
