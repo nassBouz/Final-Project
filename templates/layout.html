@@ -7,6 +7,8 @@
     <!-- favicon -->
     <link rel="shortcut icon"  href='static/logo2.png' />
     <!-- font awesome -->
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Merienda|Roboto:400i" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!-- jQuery for toggle hamburger -->
@@ -19,7 +21,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
 
     <!--  css file  -->
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
@@ -40,6 +41,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href=#><img id="logo" src={{url_for("static", filename= "logo3.png")}} width='50' height='50' alt=""></a>
                         </li>
+
+                        {% if current_user.is_authenticated  %}
+                        <h4 class="text-white"> Welcome {{current_user.username}}</h4>
+                        {% else %}
+                        <h4 class="text-white" id ="titleHere">MyEcole</h4>
+                        {% endif %}
                     </ul>
                     
                     <ul class="navbar-nav ml-auto">
@@ -61,24 +68,23 @@
                         <!-- ////////////parent////////////// -->
                     {% elif  current_user.is_authenticated  and current_user.role=='parent'%}
                         <li class="nav-item">
-                            <a id="anchor" href={{url_for('parentpage', userid=current_user.id)}}> My Kids</a>
+                            <a class="nav-link" href={{url_for('parentpage', userid=current_user.id)}}> My Kids</a>
                         </li>
                         <li class="nav-item">
-                            <a id="anchor2" href={{url_for('mySchool')}}>School page</a>
+                            <a class="nav-link" href={{url_for('mySchool')}}>School page</a>
                         </li> 
                         <li class="nav-item"> 
                             <a class="nav-link" href="{{url_for('logout')}}">Sign Out</a>
                         </li>
                     {%else%}
                         <li class="nav-item"> 
-                            <span class="glyphicon glyphicon-user"></span><a data-toggle="modal" data-target="#SignIn">Login</a>
-                        
+                            <a class="nav-link" data-toggle="modal" data-target="#SignIn">Login</a>
                             <!-- Modal -->
                             <div class="modal fade" id="SignIn" tabindex="-1" role="dialog" aria-labelledby="SignInModalTitle" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header" id="modal-header">
-                                            <h3 class="modal-title" id="SignInModalTitle">Sign In</h3>
+                                            <h4 class="modal-title" id="SignInModalTitle">Sign In</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -118,69 +124,43 @@
         {% endwith %}
     </div>
 
-            {% if not current_user.is_authenticated %}
-                <section id="aboutWrap">
-                    <h2>About</h2>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque recusandae necessitatibus quaerat fuga magni provident porro architecto eius voluptate iure officia, facilis labore voluptatibus ducimus maiores, quisquam iusto natus culpa.</p>
-                </section>
-            {% elif current_user.is_authenticated and current_user.role=='teacher' %}
-                <div class="modal-body">
-                    {% block myStudents%}
-                    {% endblock %}
-                </div>
-                <div class="myStudentDetails">
-                    {% block mystudentDetail %}
-                    {% endblock %}
-                </div>
-                <div class="schoolpage">
-                    {% block mySchool %}
-                    {% endblock %}
-                </div>
-                
-            {% elif current_user.is_authenticated and current_user.role=='parent' %}
-                <div class="modal-body">
-                    {% block mykids%}
-                    {% endblock %}
-                </div>
-                <div class="myKidsDetails">
-                    {% block myKidsDetail %}
-                    {% endblock %}
-                </div>
-                <div class="schoolpageforParent">
-                    {% block mySchoolforparent %}
-                    {% endblock %}
-                </div>
-            {% endif %}
+    {% if not current_user.is_authenticated %}
+        <section id="aboutWrap">
+            <h2>About</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque recusandae necessitatibus quaerat fuga magni provident porro architecto eius voluptate iure officia, facilis labore voluptatibus ducimus maiores, quisquam iusto natus culpa.</p>
+        </section>
+    {% elif current_user.is_authenticated and current_user.role=='teacher' %}
+        <div class="modal-body">
+            {% block myStudents%}
+            {% endblock %}
+        </div>
+        <div class="myStudentDetails">
+            {% block mystudentDetail %}
+            {% endblock %}
+        </div>
+        <div class="schoolpage">
+            {% block mySchool %}
+            {% endblock %}
+        </div>
+        
+    {% elif current_user.is_authenticated and current_user.role=='parent' %}
+        <div class="modal-body">
+            {% block mykids%}
+            {% endblock %}
+        </div>
+        <div class="myKidsDetails">
+            {% block myKidsDetail %}
+            {% endblock %}
+        </div>
+        <div class="schoolpageforParent">
+            {% block mySchoolforparent %}
+            {% endblock %}
+        </div>
+    {% endif %}
     </div>
 
 </div>
 
-
-    <!-- <footer>
-        &copy;2019 Nassima myEcole. All Rights Reserved
-        <div class="social-icons">
-                <a href="https://itunes.apple.com/" target="_blank">
-                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_footer_apple.svg">
-                </a>
-                <a href="https://play.google.com/store/apps/" target="_blank">
-    			    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_android_footer.svg">
-                </a>
-                <a href="https://facebook.com/" target="_blank">
-                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_facebook_footer.svg">
-                </a>
-                <a href="https://twitter.com/" target="_blank">
-                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_twitter_footer.svg">
-                </a>
-    			<a href="https://www.linkedin.com/in/nassima-bouziane/" target="_blank">
-                    <img src="https://assetscdn.parentsquare.com/site/20190324062503/images/logo_linkedin_footer.svg">
-                </a>
-    		</div>
-    </footer> -->
-
-    <!-- Footer -->
-    <!-- ////// -->
-    
-    <!-- //////// -->
 <footer id="foooter" class="page-footer" style="background-color: #2e3192; color: #e6e6e6;">
 
     <!-- Footer Elements -->
@@ -208,21 +188,12 @@
             <i class="fab fa-linkedin-in"> </i>
           </a>
         </li>
-       
         &copy;2019 Nassima myEcole. All Rights Reserved
       </ul>
-      <!-- Social buttons -->
-
     </div>
-    <!-- Footer Elements -->
-
-    <!-- Copyright -->
-    <!-- <div class="footer-copyright text-center py-3">© 2019 Copyright:
-      <a href="https://github.com/nassBouz/Final-Project"> mySchool</a>
-    </div> -->
-    <!-- Copyright -->
+  
 
   </footer>
-  <!-- Footer -->
+ 
 </body>
 </html>

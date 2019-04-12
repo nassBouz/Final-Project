@@ -1,6 +1,6 @@
 nav {
     background-color: #2e3192; 
-    color: #e6e6e6;
+    color: #3d3765;
 }
 
 #aboutWrap{
@@ -23,6 +23,9 @@ nav {
     <link href='http://fonts.googleapis.com/css?family=Lato:300,700,300italic,700italic' rel='stylesheet' type='text/css'>
 } */
 
+.text-white {
+    padding-top: 17px;
+} 
 
 .myStudentDetails .col-md-4 {
     margin: auto;
@@ -55,7 +58,7 @@ nav {
     min-height: calc(100vh - 100px);
     padding: 0 0  50px 0;
 }
-
+/* /////// footer  */
 .page-footer {
     height: 50px;
 }
@@ -64,8 +67,4 @@ nav {
     background:  #2e3192  !important; 
     color: #e6e6e6;
 } 
-
-#profile-img {
-
-}
 
