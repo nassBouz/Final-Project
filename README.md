@@ -64,3 +64,6 @@ Parent
 ## Future Features
 - Admin page to create classes, assign students , parents and teachers
 - Class page where users can connect and post.
+
+## Thank you 
+To everyone, especially the instructors Brock , Isha, and Dalton
