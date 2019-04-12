@@ -19,14 +19,14 @@
         </div>
     </div>
 
-
+     <!-- DISPLAYING  STUDENTS -->
     <div class="profile-div" id="my-students">
         <h5 class="post-title">My Students</h5>
         {% if students %}    
             {% for student in students %}
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <img style="max-width: 3rem;" id="profile-img"  src={{student.profileImgUrl}} alt="Generic placeholder image">
+                        <img style="max-width: 3rem;" id="profile-img"  src={{student.profileImgUrl}} alt="Generic placeholder image">
                         <a href={{url_for('getstudent', studentid=student.id)}}>{{student.fullname}}</a>
                         <p>Parent name: {{student.parent.fullname}}</p>
                         <span class="badge badge-primary badge-pill">{{student.messages.count()}}</span>

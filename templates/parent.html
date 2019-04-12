@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <!-- DISPLAYING THE STUDENTS -->
+    <!-- DISPLAYING  STUDENTS -->
     <div class="profile-div" id="my-kids">
         <h5 class="post-title">My Students</h5>
         {% if students %}    
@@ -28,7 +28,7 @@
                         <img style="max-width: 3rem;" id="profile-img"  src={{student.profileImgUrl}} alt="Generic placeholder image">
                         <a href={{url_for('getstudent', studentid=student.id)}}>{{student.fullname}}</a>
                         <p>Teacher name: {{student.teacher.fullname}}</p>
-                        <span class="badge badge-primary badge-pill">{{messages.count()}}</span>
+                        <span class="badge badge-primary badge-pill">{{student.messages.count()}}</span>
                     </li>
                 </ul>
             {% endfor %}

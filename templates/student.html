@@ -59,7 +59,7 @@
 
     {% if messages %}
         <div id="messagesSection" style="margin-top: 50px;">
-            <h4>{{ student.fullname }}  has <span class="badge badge-primary">{{ messages.count() }}</span>  Messages</h4>
+            <h4>{{ student.fullname }}  has <span class="badge badge-primary">{{ messages.count() }}</span>  messages</h4>
             {% for message in messages %}
               {% if current_user == message.sender%}
                 <div class="messagebox">
@@ -133,36 +133,33 @@
   <!-- Modal to create new message  -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
-  
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 for="recipient-name" class="col-form-label">New Message for {{student.parent.fullname}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
+          <div class="modal-header">
+            <h5 for="recipient-name" class="col-form-label">New Message for {{student.parent.fullname}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div class="modal-body">
             <form method="POST" nonvalidate>
-              {{form.hidden_tag()}}
-              <div class="form-group">
-               
-                <label class="col-form-label">title: </label> 
-                <p>{{ form.title() }}</p>
-                <label class="col-form-label">text: </label>
-                <p>{{ form.text() }}</p>
-                <label class="col-form-label">Image: </label>
-                <p>{{ form.imageUrl() }}</p>
-                <label class="col-form-label">File: </label>
-                <p>{{ form.imageFile() }}</p>
-              </div>
-              <div class="modal-footer">
-                  <button type=submit  class="btn btn-danger" >Send message</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              </div>
+                {{form.hidden_tag()}}
+                <div class="form-group">
+                  <label class="col-form-label">title: </label> 
+                  <p>{{ form.title() }}</p>
+                  <label class="col-form-label">text: </label>
+                  <p>{{ form.text() }}</p>
+                  <label class="col-form-label">Image: </label>
+                  <p>{{ form.imageUrl() }}</p>
+                  <label class="col-form-label">File: </label>
+                  <p>{{ form.imageFile() }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button type=submit  class="btn btn-danger" >Send message</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </form>
           </div>
-      </div>
+        </div>
       </div>
     </div>
 </div>  
@@ -172,133 +169,167 @@
 
 
 <!-- ////////parent////// -->
-{% block myKidsDetail %}
-    <div class="card mb-3" style="max-width: 20rem">
-        <div class="row no-gutters">
-            <div class="col-md-4">
-                <img style="max-width: 18rem;" id="profile-img" src={{student.profileImgUrl}} />
-            </div>
-            <div class="col-md-8"></div>
-                <div class="card-body">
-                    <h5 class="card-title"> {{ student.fullname }} profile : </h5>
-                    <p class="card-text" >Full Name: {{ student.fullname }}</p>
-                    <p class="card-text">Student Date of Birth: {{ student.dateOfBirth }}</p>
-                    <p class="card-text">Student Address: {{ student.address }}</p>
-                    <p class="card-text">Student phonenumber : {{ student.phonenumber }}</p>
-                    <p class ="card-text">Medical Needs: {{student.medicalNeeds}} </p>
+{% block myKidsDetails %}
+
+<div class="card mb-3" >
+    <div class="row ">
+        <div class="col-md-4">
+          <div class="img-wrapper2">
+              <img id="profile-img2" class="rounded mx-auto d-block" src={{student.profileImgUrl}} />
+          </div>
+        </div>
+          <div class="col-md-8">
+              <div class="card-body">
+                  <h5 class="card-title"> {{ student.fullname }}: </h5>
+                  <p class="card-text" >Full Name: {{ student.fullname }}</p>
+                  <p class="card-text">Student Date of Birth: {{ student.dateOfBirth }}</p>
+                  <p class="card-text">Student Address: {{ student.address }}</p>
+                  <p class="card-text">Student phonenumber : {{ student.phonenumber }}</p>
+                  <p class="card-text">Student level: {{ student.studentLevel }}</p>
+                  <p class="card-text">Student working on : {{ student.workingOn }}</p>
+                  <p class ="card-text">Medical Needs: {{student.medicalNeeds}} </p>
+                  <a href=# ><button  class="btn btn-outline-primary" data-toggle="modal" data-target="#studenteditByParent">Edit student</button></a>
                 </div>
+          </div>
                    <!-- edit student Modal by parent -->
-                <div class= "StudentEditByParent">
-                  <a href=# ><button  class="btn btn-dark" data-toggle="modal" data-target="#studenteditByParent">edit student</button></a>
-                  <div class="modal fade" id="studenteditByParent" tabindex="-1" role="dialog" aria-labelledby="editStudparent" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                          <div class="modal-content">
-                              <div class="modal-header" id="modal-header">
-                                  <h3 class="modal-title" id="StudentEditTitleParent">Edit infos</h3>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                      <span aria-hidden="true">&times;</span>
-                                  </button>
-                              </div>
-                              <div class="modal-body">
-                                  <form id="editStudenPrent" method="POST" action="{{ url_for('edit_student_parent', studentid=student.id) }}" nonvalidate>
-                                        {{form.hidden_tag()}}
-                                        <div class="form-group">
-                                          <label class="col-form-label"> medical Needs</label> <input type='text' name="medicalNeeds" class="col-form-label" value="{{student.medicalNeeds}}"/>
-                                          <label class="col-form-label" >phonenumber</label> <input type='text' name="phonenumber" class="col-form-label" value="{{student.phonenumber}}"/>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type=submit  class="btn btn-primary" >edit student </button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        </div>
-                                  </form>
-                              </div>
-                          </div>
+          <div class= "StudentEditByParent">
+            <div class="modal fade" id="studenteditByParent" tabindex="-1" role="dialog" aria-labelledby="editStudparent" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" id="modal-header">
+                            <h3 class="modal-title" id="StudentEditTitleParent">Edit Student Informations</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="editStudenPrent" method="POST" action="{{ url_for('edit_student_parent', studentid=student.id) }}" nonvalidate>
+                                  {{form.hidden_tag()}}
+                                  <div class="form-group">
+                                    <label class="col-form-label"> medical Needs</label> 
+                                    <input type='text' name="medicalNeeds" class="form-control" value="{{student.medicalNeeds}}"/>
+                                    <label class="col-form-label" >phonenumber</label> 
+                                    <input type='text' name="phonenumber" class="form-control" value="{{student.phonenumber}}"/>
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type=submit  class="btn btn-danger" >Save </button>
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div><!-- end of edit modal -->
+            </div>
+        </div>
+</div>
+{% if messages %}
+<div id="messagesSection" style="margin-top: 50px;">
+    <h4>{{ student.fullname }}  has <span class="badge badge-primary">{{ messages.count() }}</span>  messages</h4>
+    {% for message in messages %}
+      {% if current_user == message.sender%}
+        <div class="messagebox">
+            <div>
+                <h5> {{message.title}}</h5>
+                <p> {{message.text}}</p>
+            </div>
+            {% if message.imageUrl != 'noImage' %}
+              <h6>here the image</h6><img src={{message.imageUrl}}>
+            {%endif%}
+            <!-- <div>
+                <span>From  {{message.sender.username}}</span>
+            </div> -->
+             <!-- Modal edit message  -->
+            <a href="#"><button  class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter{{ message.id }}">Edit message</button></a>
+              <div class="modal fade" id="exampleModalCenter{{ message.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header" id="modal-header">
+                          <h3 class="modal-title" id="StudentEditTitle">Edit Message</h3>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <div class="modal-body">
+                          <form method="POST" action="{{ url_for('edit_message', messageid=message.id) }}" nonvalidate>
+                            {{form.hidden_tag()}}
+                            <div class="form-group">
+                              <label for="message-text"  class="col-form-label">Title: </label>
+                              <input type='text' name="title" class="form-control" value="{{message.title}}"/>
+                              <label class="col-form-label" >Text</label> 
+                              <input type='text' name="text" class="form-control" value="{{message.text}}"/>
+                              <label class="col-form-label" >Image </label> 
+                              <input type='text' name= "imageUrl" class="form-control" value="{{message.imageUrl}}">
+                              <label class="col-form-label" >File </label> 
+                              <input type="text" name="imageFile" class="form-control" value="{{message.imageFile}}">
+                            </div>
+                            <div class="modal-footer">
+                                <button type=submit  class="btn btn-danger" >Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </form>
                       </div>
                   </div>
-                </div><!-- end of edit modal -->
-            </div>
-        </div>
-    
-    {% if messages %}
-        <div id="messagesSection">
-            <h4>{{ student.fullname }}  has {{ messages.count() }} Messages</h4>
-            {% for message in messages %}
-            <div class="messagebox">
-                <div>
-                    <p>Title: {{message.title}}</p>
-                    <p>text: {{message.text}}</p>
                 </div>
-                {% if message.imageUrl != 'noImage' %}
-                  <h6>here the image</h6><img src={{message.imageUrl}}>
-                {%endif%}
-                <div>
-                    <p>By: {{message.sender.username}}</p>
-                </div>
-                
-                <!-- /////////////////////edit message by parent //////////// -->
-                 <!-- Modal edit message  -->
-                 <a href="#"><button  class="btn btn-primary" data-toggle="modal" data-target="#modaleditbyaprent{{ message.id }}">edit message</button></a>
-                 <div class="modal fade" id="modaleditbyaprent{{ message.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle3" aria-hidden="true">
-                   <div class="modal-dialog modal-dialog-centered" role="document">
-                     <div class="modal-content">
-                         <div class="modal-body">
-                             <form method="POST" action="{{ url_for('edit_message', messageid=message.id) }}" nonvalidate>
-                               {{form.hidden_tag()}}
-                               <div class="form-group">
-                                 <label class="col-form-label">title to edit : </label> <input type='text' name="title" class="col-form-label" value="{{message.title}}"/>
-                                 <label class="col-form-label" >text</label> <input type='text' name="text" class="col-form-label" value="{{message.text}}"/>
-                                 <label>image </label> <input type='text' name= "imageUrl" class="col-form-label" value="{{message.imageUrl}}">
-                                 <label>change image file </label> <input type="text" name="imageFile" class="col-form-label" value="{{message.imageFile}}">
-                               </div>
-                               <div class="modal-footer">
-                                   <button type=submit  class="btn btn-primary" >edit message </button>
-                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                               </div>
-                             </form>
-                         </div>
-                     </div>
-                   </div>
-                 </div>
-                <!-- //////////////////////////////////////////////////////// -->
-                <a href={{url_for('delete_message', messageid=message.id)}}><button class="btn btn-danger" id="submitButton">Delete</button></a>
-            </div>
-            {% endfor %}
+              </div>
+              
+            <a href={{url_for('delete_message', messageid=message.id)}}><button class="btn btn-outline-danger" id="submitButton">Delete</button></a>
         </div>
-    {% else%}
-      <p>No Messages for now</p>
-    {% endif %}
-   <!--  modal create message  -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">create a message</button>
-  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 for="recipient-name" class="col-form-label">New Message for {{student.teacher.fullname}}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-
-        <div class="modal-body">
-          <form method="POST" nonvalidate>
-              {{form.hidden_tag()}}
-            <div class="form-group">
-              <label class="col-form-label">title:</label>
-              {{ form.title() }}
-              <label class="col-form-label">text: {{ form.text() }}</label>
-              <label class="col-form-label">{{ form.imageUrl() }}</label>
-              <label class="col-form-label">{{ form.imageFile() }}</label>
+      {% else %}
+        <div class="messagebox" style="background-color: #ededf9;">
+            <div>
+                <p>Title: {{message.title}}</p>
+                <p>text: {{message.text}}</p>
             </div>
-            <div class="modal-footer">
-                <button type=submit  class="btn btn-primary" >Send message</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            {% if message.imageUrl != 'noImage' %}
+              <h6>here the image</h6><img src={{message.imageUrl}}>
+            {%endif%}
+            <div>
+                <p>By: {{message.sender.username}}</p>
             </div>
-          </form>
         </div>
-      </div>
-    </div>
+      {% endif%}
+    {% endfor %}
+</div>
+{% else%}
+<p>No messages for now</p>
+{% endif %}
+<!-- Button trigger modal to create new message-->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">create a message</button>
+<!-- Modal to create new message  -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 for="recipient-name" class="col-form-label">New Message for {{student.parent.fullname}}</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-</div>  
+  <div class="modal-body">
+    <form method="POST" nonvalidate>
+        {{form.hidden_tag()}}
+        <div class="form-group">
+          <label class="col-form-label">title: </label> 
+          <p>{{ form.title() }}</p>
+          <label class="col-form-label">text: </label>
+          <p>{{ form.text() }}</p>
+          <label class="col-form-label">Image: </label>
+          <p>{{ form.imageUrl() }}</p>
+          <label class="col-form-label">File: </label>
+          <p>{{ form.imageFile() }}</p>
+        </div>
+        <div class="modal-footer">
+            <button type=submit  class="btn btn-danger" >Send message</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+</div> 
 {% endblock %}
 
 

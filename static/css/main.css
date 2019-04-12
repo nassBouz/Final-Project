@@ -14,15 +14,6 @@ nav {
     width:600px;
 }
 
-/* .container {
-    margin-top:100px;
-} */
-
-/* body {
-    font-family: "Lato", sans-serif;
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,700,300italic,700italic' rel='stylesheet' type='text/css'>
-} */
-
 .text-white {
     padding-top: 17px;
 } 
@@ -39,6 +30,24 @@ nav {
 .myStudentDetails .col-md-4 .img-wrapper img {
     max-width: 100%; 
 }
+
+
+
+.myKidsDetails .col-md-4 {
+    margin: auto;
+}
+.myKidsDetails .col-md-4 .img-wrapper2 {
+    max-width: 15rem; 
+    margin: auto;
+}
+
+.myKidsDetails .col-md-4 .img-wrapper2 img {
+    max-width: 100%; 
+}
+
+
+
+
 
 .messagebox {
     background-color: #e6e6e6; 
