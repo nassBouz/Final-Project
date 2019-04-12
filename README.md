@@ -44,10 +44,10 @@ Parent
 - logged in Parent can go to their profile page and see the list of their kids, and also edit/update their profile.
 - Parent can go to the student profile where they can update student informations, send/edit/delete/receive messages.
  
-## Wireframes
+## ERD (Entity Relationship Diagram)
  ![Screenshot ](../master/IMG_2566.JPG)
  
-## ERD (Entity Relationship Diagram)
+## Wireframes
  ![Screenshot ](../master/IMG_2863.JPG)
  
 ## Screen Shots 
