@@ -27,6 +27,42 @@ myEcole simplifies communication between parents and teachers, by bringing toget
 - Flask-login
 - Peewee
 
+## Installation steps
+
+### Virtualenv
+Let's also build a virtual environment. Virtual environments allow us to have multiple versions of Python on the same system so we can have different versions of both Python and the packages we are using on our computers.
+
+```https://github.com/nassBouz/Final-Project.git```
+
+```$ cd Final-Project```
+
+```$ pip3 install virtualenv```
+
+```$ virtualenv .env -p python3```
+
+```$ source .env/bin/activate```
+
+### Dependencies 
+
+```$ pip3 install flask flask-login flask-bcrypt peewee flask-wtf```
+
+```$ pip3 freeze > requirements.txt```
+
+### The App
+You will need to create a keyEcole.py that contains the following variables
+
+ scret_key = "the secret key of your App"
+ 
+ MAIL_USERNAME = "the email address that you use to send notifications from"
+ 
+ MAIL_PASSWORD = " password of your email address"
+ 
+ MAIL_SERVER = " by default is 'smtp.gmail.com' "
+
+then just run :
+
+```$git python3 app.py```
+
 
 ## Approach
 
