@@ -20,7 +20,6 @@ class User(UserMixin, Model):
     is_admin = BooleanField(default=False)
     phonenumber = CharField(max_length=15)
     profileImgUrl = CharField(default='static/userDefault.png')
-    # make it strict to teacher or parent only
     role = CharField(max_length=120)
     
     class Meta:
@@ -65,7 +64,6 @@ class Student(Model):
     ) 
     fullname = CharField(max_length=120)
     gender= CharField(max_length=12)
-    # change date 
     dateOfBirth= DateField()
     otherDetails = TextField()
     joined_at = DateTimeField(default=datetime.datetime.now())
@@ -228,7 +226,6 @@ class Event(Model):
             )
         except IntegrityError:
             raise ValueError("event already exists")
-
 
 class UserUpVote(Model):
     user_id= IntegerField()

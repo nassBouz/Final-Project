@@ -2,109 +2,96 @@
 
 
 {% block mySchool %}
-<blockquote class="blockquote text-center"></blockquote>
-<p class="mb-0" style=" color:#d4145a; font-size: 36px; font-family: 'Indie Flower', cursive; margin:auto;">Welcome to Garden Primary School</p>
-</blockquote>
 
-<img u="image" src={{url_for("static", filename= "pencils.jpg")}}  style=" z-index: -1; width: 100%; height: 600px; top: 100px; left: 0px; display: inline; position: absolute; margin-top: -20px;">
+    <blockquote class="blockquote text-center">
+        <p class="mb-0" style=" color:#d4145a; font-size: 36px; font-family: 'Indie Flower', cursive; margin:auto;">Welcome to Garden Primary School</p>
+    </blockquote>
+    <img u="image" src={{url_for("static", filename= "pencils.jpg")}}  style=" z-index: -1; width: 100%; height: 600px; top: 100px; left: 0px; display: inline; position: absolute; margin-top: -20px;">
     <section id="aboutWrap">
-    <p style=" color:#d4145a; font-size:18px; font-family: 'Indie Flower', cursive; ">We are a Pre K-5 school serving a culturally diverse student population. Founded in 1954, it is one of the largest elementary schools on the Bay Area with a current enrollment of approximately 700 students. Our teachers serve a wide range of ethnicities and socioeconomic groups.We are committed to safeguarding the physical and emotional well-being of our students.</p>
+        <p style=" color:#d4145a; font-size:18px; font-family: 'Indie Flower', cursive; ">We are a Pre K-5 school serving a culturally diverse student population. Founded in 1954, it is one of the largest elementary schools on the Bay Area with a current enrollment of approximately 700 students. Our teachers serve a wide range of ethnicities and socioeconomic groups.We are committed to safeguarding the physical and emotional well-being of our students.</p>
     </section>
-  
-
-
-<div class ="card mb-3"  style="margin-top: 400px;">
-    <h2 style=" color: #2e3192; font-size:34px;font-weight:bold; font-family: 'Indie Flower', cursive; "> Upcoming Events</h2> 
-   
-    <div class = "row">
-    {% for event in events %}
-        <div class="col-md-4">
-            <div class="col-md-4">
-                <img style="max-width: 15rem;" id="profile-img" src={{event.imgUrl}} />
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">When: {{event.dateEvent}}</h5>
-                    <p class="card-text" > {{ event.title }}</p>
+    <div class ="card mb-3"  style="margin-top: 400px;">
+        <h2 style=" color: #2e3192; font-size:34px;font-weight:bold; font-family: 'Indie Flower', cursive; "> Upcoming Events</h2> 
+        <div class = "row">
+            {% for event in events %}
+                <div class="col-md-4">
+                    <div class="col-md-4">
+                        <img style="max-width: 15rem;" id="profile-img" src={{event.imgUrl}} />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">When: {{event.dateEvent}}</h5>
+                            <p class="card-text" > {{ event.title }}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}  
         </div>
- 
-    {% endfor %}  
-</div>
-</div> 
+    </div> 
 
-<h2>Know Our Teachers</h2>
-{% for teacher in teachers %}
-<div class="card mb-3" style="max-width: 18rem">
-    <div class="row no-gutters">
-        <div class="col-md-4">
-            <img style="max-width: 18rem;" id="profile-img" src={{teacher.profileImgUrl}} />
+    <h2>Know Our Teachers</h2>
+    {% for teacher in teachers %}
+        <div class="card mb-3" style="max-width: 18rem">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img style="max-width: 18rem;" id="profile-img" src={{teacher.profileImgUrl}} />
+                </div>
+                <div class="col-md-8"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">My Profile</h5>
+                        <p class="card-text" >Full Name: {{ teacher.fullname }}</p>
+                    </div>
+                </div>
         </div>
-        <div class="col-md-8"></div>
-            <div class="card-body">
-                <h5 class="card-title">My Profile</h5>
-                <p class="card-text" >Full Name: {{ teacher.fullname }}</p>
-            </div>
-        </div>
-</div>
+    {% endfor %}
 
-{% endfor %}
 {% endblock%}
 
 
-
 {% block mySchoolforparent %}
-<blockquote class="blockquote text-center"></blockquote>
-<p class="mb-0" style=" color:#d4145a; font-size: 36px; font-family: 'Indie Flower', cursive; margin:auto;">Welcome to Garden Primary School</p>
-</blockquote>
+    <blockquote class="blockquote text-center"></blockquote>
+        <p class="mb-0" style=" color:#d4145a; font-size: 36px; font-family: 'Indie Flower', cursive; margin:auto;">Welcome to Garden Primary School</p>
+    </blockquote>
 
-<img u="image" src={{url_for("static", filename= "pencils.jpg")}}  style=" z-index: -1; width: 100%; height: 600px; top: 100px; left: 0px; display: inline; position: absolute; margin-top: -20px;">
+    <img u="image" src={{url_for("static", filename= "pencils.jpg")}}  style=" z-index: -1; width: 100%; height: 600px; top: 100px; left: 0px; display: inline; position: absolute; margin-top: -20px;">
     <section id="aboutWrap">
-    <p style=" color:#d4145a; font-size:18px; font-family: 'Indie Flower', cursive; ">We are a Pre K-5 school serving a culturally diverse student population. Founded in 1954, it is one of the largest elementary schools on the Bay Area with a current enrollment of approximately 700 students. Our teachers serve a wide range of ethnicities and socioeconomic groups.We are committed to safeguarding the physical and emotional well-being of our students.</p>
+        <p style=" color:#d4145a; font-size:18px; font-family: 'Indie Flower', cursive; ">We are a Pre K-5 school serving a culturally diverse student population. Founded in 1954, it is one of the largest elementary schools on the Bay Area with a current enrollment of approximately 700 students. Our teachers serve a wide range of ethnicities and socioeconomic groups.We are committed to safeguarding the physical and emotional well-being of our students.</p>
     </section>
-  
-
-
-<div class ="card mb-3"  style="margin-top: 400px;">
-    <h2 style=" color: #2e3192; font-size:34px;font-weight:bold; font-family: 'Indie Flower', cursive; "> Upcoming Events</h2> 
-   
-    <div class = "row">
-    {% for event in events %}
-        <div class="col-md-4">
-            <div class="col-md-4">
-                <img style="max-width: 15rem;" id="profile-img" src={{event.imgUrl}} />
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">When: {{event.dateEvent}}</h5>
-                    <p class="card-text" > {{ event.title }}</p>
+    
+    <div class ="card mb-3"  style="margin-top: 400px;">
+        <h2 style=" color: #2e3192; font-size:34px;font-weight:bold; font-family: 'Indie Flower', cursive; "> Upcoming Events</h2> 
+        <div class = "row">
+            {% for event in events %}
+                <div class="col-md-4">
+                    <div class="col-md-4">
+                        <img style="max-width: 15rem;" id="profile-img" src={{event.imgUrl}} />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">When: {{event.dateEvent}}</h5>
+                            <p class="card-text" > {{ event.title }}</p>
+                        </div>
+                    </div>
                 </div>
+            {% endfor %}  
+        </div>
+    </div> 
+
+    <h2>Know Our Teachers</h2>
+    {% for teacher in teachers %}
+        <div class="card mb-3" style="max-width: 18rem">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img style="max-width: 18rem;" id="profile-img" src={{teacher.profileImgUrl}} />
+                </div>
+                <div class="col-md-8"></div>
+                    <div class="card-body">
+                        <h5 class="card-title">My Profile</h5>
+                        <p class="card-text" >Full Name: {{ teacher.fullname }}</p>
+                    </div>
             </div>
         </div>
- 
-    {% endfor %}  
-</div>
-</div> 
-
-<h2>Know Our Teachers</h2>
-{% for teacher in teachers %}
-<div class="card mb-3" style="max-width: 18rem">
-    <div class="row no-gutters">
-        <div class="col-md-4">
-            <img style="max-width: 18rem;" id="profile-img" src={{teacher.profileImgUrl}} />
-        </div>
-        <div class="col-md-8"></div>
-            <div class="card-body">
-                <h5 class="card-title">My Profile</h5>
-                <p class="card-text" >Full Name: {{ teacher.fullname }}</p>
-            </div>
-        </div>
-</div>
-
-{% endfor %}
-
-
+    {% endfor %}
 
 {% endblock%}
 

@@ -7,13 +7,10 @@ import os
 import models 
 import forms 
 import json
-# from keyNeigh import keyNeigh
+from keyEcole import secret_key, MAIL_USERNAME , MAIL_PASSWORD ,MAIL_SERVER
 # for mail alert
 from flask_mail import Mail, Message
-from flask import Flask, g
-from flask import render_template, flash, redirect, url_for
 import json
-
 
 
 DEBUG = True
@@ -23,16 +20,16 @@ app = Flask(__name__,instance_relative_config=True)
 
 
 # //////////// mail setup/////////////
-app.config['MAIL_SERVER']='smtp.gmail.com'
+app.config['MAIL_SERVER']= MAIL_SERVER
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'bouznass19@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Afroukh99'
+app.config['MAIL_USERNAME'] = MAIL_USERNAME 
+app.config['MAIL_PASSWORD'] = MAIL_PASSWORD 
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 
 mail = Mail(app)
 
-app.secret_key = 'myecole.secretkey'
+app.secret_key = secret_key
 login_manager = LoginManager()
 
 ##sets up our login for the app
@@ -59,7 +56,6 @@ def after_request(response):
     g.db.close()
     return response
 
-# signin teacher
 def handle_signin(form):
     try:
         user = models.User.get(models.User.email == form.email.data)
@@ -68,7 +64,7 @@ def handle_signin(form):
     else:
         if check_password_hash(user.password, form.password.data):
             login_user(user)
-            flash('You have successfully Signed In!!!', 'success')
+            flash('You have successfully Signed', 'success')
             return redirect(url_for('index'))
         else:
             flash("your email or password doesn't match", "error")
@@ -88,15 +84,16 @@ def index():
 def logout():
     logout_user()
     flash("You've been logged out", "success")
-    return redirect(url_for('index'))
-
+    # return redirect(url_for('index'))
+    return redirect(url_for('mySchool'))
+# teacher profile
 @app.route('/teacherprofile/<userid>', methods=['GET'])
 def profilepage(userid):
     user = models.User.get(models.User.id == int(userid))
     students = models.Student.select().where(models.Student.teacher_id==int(user.id))
     messages = models.Message.select().where(models.Message.recipient_id == int(userid))
     return render_template('teacher.html', user=user ,students=students, messages=messages) 
-
+# parent profile
 @app.route('/parentprofile/<userid>', methods=['GET'])
 def parentpage(userid):
     user = models.User.get(models.User.id == int(userid))
@@ -104,6 +101,7 @@ def parentpage(userid):
     messages = models.Message.select().where(models.Message.recipient_id == int(userid))
     return render_template('parent.html', user=user,students=students, messages=messages)
 
+# rendering messages and sending email alert
 @app.route('/message/<studentid>', methods =['GET', 'POST','PUT'])
 def getstudent(studentid=None):
     if studentid != None :
@@ -139,12 +137,11 @@ def getstudent(studentid=None):
                     imageUrl=form.imageUrl.data,
                     student=student
                 )
-                msg = Message("Good Morning , your have a new message from ",sender=senderEmail,recipients=[receiverEmail])
+                msg = Message("Hello , your have a new message from ",sender=senderEmail,recipients=[receiverEmail])
                 msg.body = f'Hello {student.parent.fullname}, {user.fullname} has sent you this message : {form.text.data}'
                 mail.send(msg)
                 flash("Your message has successefully been sent" , "success")
                 return redirect("/message/{}".format(studentid))
-
         return render_template('student.html',form=form ,student=student, user=user, messages=messages)
 
 #edit student informations by teacher
@@ -169,7 +166,6 @@ def edit_student_parent(studentid=None):
     flash('Your changes have been saved', 'success')
     return redirect("/message/{}".format(studentid))
 
-
 # edit own message by parent or teacher
 @app.route('/edit-message/<messageid>', methods=['GET','POST'])
 def edit_message(messageid=None):
@@ -187,8 +183,6 @@ def edit_message(messageid=None):
         message.save()
         flash('Your changes have been saved.', 'success')
         return redirect("/message/{}".format(studentid))
-        # return redirect(url_for('message', messageid= message.id,form=form))
-        # return render_template('student.html',form=form ,student=student,user=user, message=message)
     if message != None:
         form.title.data = message.title
         form.text.data = message.text
@@ -309,6 +303,31 @@ if __name__ == '__main__':
             about='I am a writter',
             role='parent'
             )
+        models.User.create_user(
+            username='Lou',
+            email='lou@gmail.com',
+            fullname ='Lourdes Morales',
+            password='123',
+            profileImgUrl='https://ak2.picdn.net/shutterstock/videos/10547162/thumb/1.jpg',
+            phonenumber='92390095454',
+            address='Main street Berkley CA',
+            about='I am a Thinker',
+            role='parent'
+            )
+        models.Student.create_student(
+            teacher=1,
+            parent=8,
+            fullname='Morales Jack',
+            gender='male',
+            dateOfBirth='11-08-2013',
+            profileImgUrl='https://cdn.shopify.com/s/files/1/0879/4406/products/Jonas-Paul-Kids-Glasses-Solomon-Navy_grande.jpg?v=1530805624',
+            phonenumber='92390095454',
+            address='Main street Berkley CA',
+            medicalNeeds='Dog allergy',
+            otherDetails='OTHER STUFFS',
+            studentLevel= 6,
+            workingOn = 'Letters'
+            )
         models.Student.create_student(
             teacher=1,
             parent=7,
@@ -394,19 +413,22 @@ if __name__ == '__main__':
             title = 'Pijama Day',
             text='pijama day ',
             imgUrl ='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmqp-ShLSRkk3Nj-2634MaiUDJzJOIW7-59pKAH04vkmGquqCZ',
-            priority='0')
+            priority='0'
+            )
         models.Event.create_event(
             dateEvent='5-12-2019',
             title = 'Field Trip to Oakland Zoo',
             text='Field trip',
             imgUrl = 'https://www.marinmommies.com/sites/default/files/styles/full-width_column_827/public/stories/giraffes2.jpg?itok=m5H44a36',
-            priority='0')
+            priority='0'
+            )
         models.Event.create_event(
             dateEvent='4-26-2019',
             title = 'Good Friday',
             text='No school',
             imgUrl = 'https://p1cdn4static.sharpschool.com/UserFiles/Servers/Server_719363/Image/clip%20art/no%20school.jpg',
-            priority='0')
+            priority='0'
+            )
         
     except ValueError:
         pass

@@ -20,7 +20,6 @@ class MessageForm(Form):
     imageFile = TextAreaField("image file here")
     submit = SubmitField('Create Message')
 
-
 class UserEditForm(Form):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -39,19 +38,6 @@ class EditStudentParent(Form):
     medicalNeeds = TextAreaField("medical needs",  validators=[DataRequired()])
     phonenumber = IntegerField()
 
-
-
-
-
-
-
-
-
-# EditMessageForm
-# class CreateMessageForm(form):
-# class EditMessageForm(Form):
-# class EditStudentLevel(Form):
-# class EditStudentMedicalRecord(Form):
 
 
 

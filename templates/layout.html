@@ -1,39 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- favicon -->
-    <link rel="shortcut icon"  href='static/logo2.png' />
-    <!-- font awesome -->
-    <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans:700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Merienda|Roboto:400i" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <!-- jQuery for toggle hamburger -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.css"> -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
-    <!-- bootstrap cdn  -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <!--  css file  -->
-    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
-    
-    <!-- my js file -->
-    <title>MyEcole</title>
-</head>
-<body>
-    <div class="content">
-    <!--###############  Begin of Nav bar regular ########### -->
-        <header>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <!-- favicon -->
+        <link rel="shortcut icon"  href='static/logo2.png' />
+        <!-- font awesome -->
+        <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans:700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Merienda|Roboto:400i" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <!-- jQuery for toggle hamburger -->
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- bootstrap cdn  -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <!--  css file  -->
+        <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+        <title>MyEcole</title>
+    </head>
+    <body>
+        <div class="content">
             <nav class="navbar navbar-expand-lg navbar-light">
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -101,99 +93,96 @@
                 </ul>
             </div>
         </nav>
-    <div class= "container" >
-        <!-- display error/succes -->
-    <div class="container mt-3">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    {% if category == 'success'%}
-                        <div class="alert alert-success mb-3 " role="alert">
-                            <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
-                            {{ message }}
-                        </div>
+        <div class= "container" >
+            <!-- display error/succes -->
+            <div class="container mt-3">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == 'success'%}
+                                <div class="alert alert-success mb-3 " role="alert">
+                                    <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+                            {% if category == 'error'%}
+                                <div class="alert alert-danger mb-3 " role="alert">
+                                        <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
+                                    {{ message }}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
-                    {% if category == 'error'%}
-                        <div class="alert alert-danger mb-3 " role="alert">
-                                <a href = "#" class = "close" data-dismiss = "alert">&times;</a>
-                            {{ message }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                {% endwith %}
+            </div>
+            {% if not current_user.is_authenticated %}
+                <div id="aboutWrap">
+                    <blockquote class="blockquote text-center">
+                    <p class="mb-0" style=" color:#d4145a; font-size: 36px; font-family: 'Indie Flower', cursive; margin:auto;">Welcome to Garden Primary School</p>
+                    </blockquote>
+                    <img u="image" src={{url_for("static", filename= "pencils.jpg")}}  style=" z-index: -1; width: 100%; height: 600px; top: 100px; left: 0px; display: inline; position: absolute; margin-top: -20px;">
+                        <section id="aboutWrap">
+                        <p style=" color:#d4145a; font-size:18px; font-family: 'Indie Flower', cursive; ">We are a Pre K-5 school serving a culturally diverse student population. Founded in 1954, it is one of the largest elementary schools on the Bay Area with a current enrollment of approximately 700 students. Our teachers serve a wide range of ethnicities and socioeconomic groups.We are committed to safeguarding the physical and emotional well-being of our students.</p>
+                        </section>
+                    </div>
+            {% elif current_user.is_authenticated and current_user.role=='teacher' %}
+                <div class="modal-body">
+                    {% block myStudents%}
+                    {% endblock %}
+                </div>
+                <div class="myStudentDetails">
+                    {% block mystudentDetail %}
+                    {% endblock %}
+                </div>
+                <div class="schoolpage">
+                    {% block mySchool %}
+                    {% endblock %}
+                </div>
+            
+            {% elif current_user.is_authenticated and current_user.role=='parent' %}
+                <div class="modal-body">
+                    {% block mykids%}
+                    {% endblock %}
+                </div>
+                <div class="myKidsDetails">
+                    {% block myKidsDetails %}
+                    {% endblock %}
+                </div>
+                <div class="schoolpageforParent">
+                    {% block mySchoolforparent %}
+                    {% endblock %}
+                </div>
             {% endif %}
-        {% endwith %}
-    </div>
-
-    {% if not current_user.is_authenticated %}
-        <section id="aboutWrap">
-            <h2>About</h2>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque recusandae necessitatibus quaerat fuga magni provident porro architecto eius voluptate iure officia, facilis labore voluptatibus ducimus maiores, quisquam iusto natus culpa.</p>
-        </section>
-    {% elif current_user.is_authenticated and current_user.role=='teacher' %}
-        <div class="modal-body">
-            {% block myStudents%}
-            {% endblock %}
+          </div>
         </div>
-        <div class="myStudentDetails">
-            {% block mystudentDetail %}
-            {% endblock %}
-        </div>
-        <div class="schoolpage">
-            {% block mySchool %}
-            {% endblock %}
-        </div>
-        
-    {% elif current_user.is_authenticated and current_user.role=='parent' %}
-        <div class="modal-body">
-            {% block mykids%}
-            {% endblock %}
-        </div>
-        <div class="myKidsDetails">
-            {% block myKidsDetails %}
-            {% endblock %}
-        </div>
-        <div class="schoolpageforParent">
-            {% block mySchoolforparent %}
-            {% endblock %}
-        </div>
-    {% endif %}
-    </div>
-
-</div>
-
-<footer id="foooter" class="page-footer" style="background-color: #2e3192; color: #e6e6e6;">
-
-    <!-- Footer Elements -->
-    <div class="container">
-
-     <!-- Social buttons -->
-    <ul class="list-unstyled list-inline text-center">
-        <li class="list-inline-item">
-          <a class="btn-floating btn-fb mx-1">
-            <i class="fab fa-facebook-f"> </i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn-floating btn-tw mx-1">
-            <i class="fab fa-twitter"> </i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a class="btn-floating btn-gplus mx-1">
-            <i class="fab fa-google-plus-g"> </i>
-          </a>
-        </li>
-        <li class="list-inline-item">
-          <a link="https://www.linkedin.com/in/nassima-bouziane/"  class="btn-floating btn-li mx-1">
-            <i class="fab fa-linkedin-in"> </i>
-          </a>
-        </li>
-        &copy;2019 Nassima myEcole. All Rights Reserved
-      </ul>
-    </div>
-  
-
-  </footer>
- 
-</body>
+        <footer id="foooter" class="page-footer" style="background-color: #2e3192; color: #e6e6e6;">
+            <!-- Footer Elements -->
+            <div class="container">
+                <!-- Social buttons -->
+                <ul class="list-unstyled list-inline text-center">
+                    <li class="list-inline-item">
+                        <a class="btn-floating btn-fb mx-1">
+                            <i class="fab fa-facebook-f"> </i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="btn-floating btn-tw mx-1">
+                            <i class="fab fa-twitter"> </i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a class="btn-floating btn-gplus mx-1">
+                            <i class="fab fa-google-plus-g"> </i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a link="https://www.linkedin.com/in/nassima-bouziane/"  class="btn-floating btn-li mx-1">
+                            <i class="fab fa-linkedin-in"> </i>
+                        </a>
+                    </li>
+                    &copy;2019 Nassima myEcole. All Rights Reserved
+                </ul>
+            </div>
+        </footer>
+    </body>
 </html>
