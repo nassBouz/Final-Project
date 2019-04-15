@@ -32,7 +32,7 @@ myEcole simplifies communication between parents and teachers, by bringing toget
 ### Virtualenv
 Let's also build a virtual environment. Virtual environments allow us to have multiple versions of Python on the same system so we can have different versions of both Python and the packages we are using on our computers.
 
-```https://github.com/nassBouz/Final-Project.git```
+```$ git clone https://github.com/nassBouz/Final-Project.git```
 
 ```$ cd Final-Project```
 
