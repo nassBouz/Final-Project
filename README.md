@@ -1,5 +1,13 @@
-## myEcole 
-<img src="/Users/nassimabouziane/Desktop/myEcole.png" alt="Gulp logo">
+## App name: myEcole 
+![Screenshot ](../master/myEcole.png)
+
+
+- School Page
+![Screenshot ](../master/schoolpage.png)
+
+- Parent Page 
+![Screenshot ](../master/parentPage.png)
+
 
 
 ## Overview
@@ -36,15 +44,26 @@ Parent
 - logged in Parent can go to their profile page and see the list of their kids, and also edit/update their profile.
 - Parent can go to the student profile where they can update student informations, send/edit/delete/receive messages.
  
-## Wireframes
- <img src="">
- 
 ## ERD (Entity Relationship Diagram)
- <img src="">
+ ![Screenshot ](../master/IMG_2566.JPG)
+ 
+## Wireframes
+ ![Screenshot ](../master/IMG_2863.JPG)
+ 
+## Screen Shots 
+![Screenshot ](../master/errorhandling.png)
+
+![Screenshot ](../master/displayStudents.png)
  
 ## Biggest Wins and Challenges
+- Learning Flask in depth
+- Time management and prioritazing my tasks
+
 
 
 ## Future Features
 - Admin page to create classes, assign students , parents and teachers
-- Class page where users can connect and post
+- Class page where users can connect and post.
+
+## Thank you 
+To everyone, especially the instructors Brock , Isha, and Dalton
